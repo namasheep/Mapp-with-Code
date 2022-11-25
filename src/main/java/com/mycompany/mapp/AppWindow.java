@@ -5,10 +5,15 @@
 package com.mycompany.mapp;
 
 import java.awt.Color;
-
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.*;
 import java.io.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
 
 
 
@@ -25,12 +30,16 @@ public class AppWindow extends javax.swing.JFrame {
     File buildingLocation = new File(buildingPath);
     String[] buildingNameFileList = buildingLocation.list();
     String imgURL = buildingPath+"/"+buildingNameFileList[floorIndex];
+    double zoomMul = 1;
+    int xCirc = 0;
+    int yCirc = 0;
     /**
      * Creates new form AppWindow
      */
     public AppWindow() {
         initComponents();
         AutoCompleteDecorator.decorate(searchBox);
+        
 
     }
 
@@ -50,10 +59,15 @@ public class AppWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         searchBox = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        zoomPanel = new javax.swing.JPanel();
+        plusZoomButton = new javax.swing.JButton();
+        minusZoomButton = new javax.swing.JButton();
         mapPanel = new javax.swing.JPanel();
-        jLayeredPane2 = new javax.swing.JLayeredPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        mapImageScrollPane = new javax.swing.JScrollPane();
+        jLayeredPane3 = new javax.swing.JLayeredPane();
+        jPanel1 = new javax.swing.JPanel();
         mapImage = new javax.swing.JLabel();
+        pOILayer1 = new com.mycompany.mapp.POILayer();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,6 +135,24 @@ public class AppWindow extends javax.swing.JFrame {
             }
         });
 
+        zoomPanel.setLayout(new javax.swing.BoxLayout(zoomPanel, javax.swing.BoxLayout.PAGE_AXIS));
+
+        plusZoomButton.setText("+");
+        plusZoomButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                plusZoomButtonActionPerformed(evt);
+            }
+        });
+        zoomPanel.add(plusZoomButton);
+
+        minusZoomButton.setText("-");
+        minusZoomButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minusZoomButtonActionPerformed(evt);
+            }
+        });
+        zoomPanel.add(minusZoomButton);
+
         javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
         topPanel.setLayout(topPanelLayout);
         topPanelLayout.setHorizontalGroup(
@@ -128,50 +160,104 @@ public class AppWindow extends javax.swing.JFrame {
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(526, Short.MAX_VALUE))
+                    .addGroup(topPanelLayout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(581, Short.MAX_VALUE))
+                    .addGroup(topPanelLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))))
         );
         topPanelLayout.setVerticalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPanelLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topPanelLayout.createSequentialGroup()
+                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(topPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(topPanelLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 388, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17))
         );
 
         jLayeredPane1.setLayer(topPanel, javax.swing.JLayeredPane.PALETTE_LAYER);
         jLayeredPane1.add(topPanel);
 
-        jScrollPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        mapImageScrollPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         mapImage.setIcon(new ImageIcon(imgURL));
-        jScrollPane1.setViewportView(mapImage);
+        mapImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mapImageMouseClicked(evt);
+            }
+        });
 
-        jLayeredPane2.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mapImage, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mapImage, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+        );
 
-        javax.swing.GroupLayout jLayeredPane2Layout = new javax.swing.GroupLayout(jLayeredPane2);
-        jLayeredPane2.setLayout(jLayeredPane2Layout);
-        jLayeredPane2Layout.setHorizontalGroup(
-            jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE)
+        pOILayer1.setOpaque(false);
+        pOILayer1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pOILayer1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pOILayer1Layout = new javax.swing.GroupLayout(pOILayer1);
+        pOILayer1.setLayout(pOILayer1Layout);
+        pOILayer1Layout.setHorizontalGroup(
+            pOILayer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 889, Short.MAX_VALUE)
         );
-        jLayeredPane2Layout.setVerticalGroup(
-            jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+        pOILayer1Layout.setVerticalGroup(
+            pOILayer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 533, Short.MAX_VALUE)
         );
+
+        jLayeredPane3.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane3.setLayer(pOILayer1, javax.swing.JLayeredPane.PALETTE_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane3Layout = new javax.swing.GroupLayout(jLayeredPane3);
+        jLayeredPane3.setLayout(jLayeredPane3Layout);
+        jLayeredPane3Layout.setHorizontalGroup(
+            jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 889, Short.MAX_VALUE)
+            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(pOILayer1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jLayeredPane3Layout.setVerticalGroup(
+            jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 533, Short.MAX_VALUE)
+            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(pOILayer1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        mapImageScrollPane.setViewportView(jLayeredPane3);
 
         javax.swing.GroupLayout mapPanelLayout = new javax.swing.GroupLayout(mapPanel);
         mapPanel.setLayout(mapPanelLayout);
         mapPanelLayout.setHorizontalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane2)
+            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane2)
+            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
         );
 
         jLayeredPane1.add(mapPanel);
@@ -200,14 +286,101 @@ public class AppWindow extends javax.swing.JFrame {
 
     private void searchBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBoxItemStateChanged
         // TODO add your handling code here:
-        System.out.println(searchBox.getSelectedIndex());
+        
         if(searchBox.getSelectedIndex()==-1){
             return;
         }
         floorIndex=searchBox.getSelectedIndex();
         imgURL = buildingPath+"/"+buildingNameFileList[floorIndex];
         mapImage.setIcon(new ImageIcon(imgURL));
+        pOILayer1.saveAndReset();
+        zoomMul = 1;
     }//GEN-LAST:event_searchBoxItemStateChanged
+
+    private void plusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusZoomButtonActionPerformed
+        // TODO add your handling code here:
+         // load the image to a imageIcon
+        File im = new File(imgURL);
+        
+        try{
+            zoomMul*=2;
+           /* System.out.println("Before");
+            System.out.println(mapImageScrollPane.getViewport().getViewPosition());
+            
+            System.out.println(mapImageScrollPane.getViewport().getExtentSize());*/
+            Image image = ImageIO.read(im); // transform it 
+            Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+            mapImage.setIcon(new ImageIcon(newimg));
+            Rectangle view = mapImageScrollPane.getViewport().getViewRect();
+            Dimension size = mapImageScrollPane.getViewport().getExtentSize();
+            
+            view.setBounds(view.x*2+size.width/2,view.y+size.height/2,view.width,view.height);
+            
+            mapImage.scrollRectToVisible(view);
+            
+            /*System.out.println("After");
+            System.out.println(mapImageScrollPane.getViewport().getViewPosition());
+            
+            System.out.println(mapImageScrollPane.getViewport().getExtentSize());*/
+            pOILayer1.sizeMul=zoomMul;
+            
+        }
+        catch(IOException imgMiss){
+            System.out.println("Missing image");
+            
+        }
+        
+        
+        
+          // transform it back
+    }//GEN-LAST:event_plusZoomButtonActionPerformed
+
+    private void minusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minusZoomButtonActionPerformed
+        // TODO add your handling code here:
+        File im = new File(imgURL);
+        try{
+            zoomMul*=0.5;
+            
+            
+            System.out.println("Before");
+            System.out.println(mapImageScrollPane.getViewport().getViewPosition());
+            System.out.println(mapImageScrollPane.getViewport().getExtentSize());
+            Image image = ImageIO.read(im); // transform it 
+            Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+            mapImage.setIcon(new ImageIcon(newimg));
+            Point old = mapImageScrollPane.getViewport().getViewPosition();
+            
+            mapImageScrollPane.getViewport().setViewPosition(new Point(old.x/4,old.y/4));
+            System.out.println("AFter");
+            System.out.println(mapImageScrollPane.getViewport().getViewPosition());
+            System.out.println(mapImageScrollPane.getViewport().getExtentSize());
+            pOILayer1.sizeMul=zoomMul;
+        }
+        catch(IOException imgMiss){
+            System.out.println("Missing image");
+            
+        }
+        
+    }//GEN-LAST:event_minusZoomButtonActionPerformed
+
+    private void mapImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mapImageMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_mapImageMouseClicked
+
+    private void pOILayer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseClicked
+        // TODO add your handling code here:
+        POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
+        if(clickedPOI==null){
+            POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),"room XXX");
+            System.out.println(evt.getX()+" "+evt.getY());
+            pOILayer1.addPOI(newPOI);
+            pOILayer1.repaint();
+            
+        }
+        System.out.println(clickedPOI);
+        
+    }//GEN-LAST:event_pOILayer1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -247,14 +420,20 @@ public class AppWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JLayeredPane jLayeredPane2;
+    private javax.swing.JLayeredPane jLayeredPane3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel mapImage;
+    private javax.swing.JScrollPane mapImageScrollPane;
     private javax.swing.JPanel mapPanel;
+    private javax.swing.JButton minusZoomButton;
+    private com.mycompany.mapp.POILayer pOILayer1;
+    private javax.swing.JButton plusZoomButton;
     private javax.swing.JComboBox<String> searchBox;
     private javax.swing.JPanel topPanel;
+    private javax.swing.JPanel zoomPanel;
     // End of variables declaration//GEN-END:variables
+    
 }
