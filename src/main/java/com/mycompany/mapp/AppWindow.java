@@ -25,6 +25,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 
 public class AppWindow extends javax.swing.JFrame {
+    boolean admin = true;
     int floorIndex=0;
     String buildingPath = "src/main/resources/images/Floors/MC";
     File buildingLocation = new File(buildingPath);
@@ -68,6 +69,7 @@ public class AppWindow extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         mapImage = new javax.swing.JLabel();
         pOILayer1 = new com.mycompany.mapp.POILayer();
+        jOptionPanePOIOption = new javax.swing.JOptionPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -190,6 +192,7 @@ public class AppWindow extends javax.swing.JFrame {
         mapImageScrollPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         mapImage.setIcon(new ImageIcon(imgURL));
+        mapImage.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         mapImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mapImageMouseClicked(evt);
@@ -200,11 +203,11 @@ public class AppWindow extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mapImage, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE)
+            .addComponent(mapImage, javax.swing.GroupLayout.DEFAULT_SIZE, 893, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mapImage, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+            .addComponent(mapImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
         );
 
         pOILayer1.setOpaque(false);
@@ -218,11 +221,11 @@ public class AppWindow extends javax.swing.JFrame {
         pOILayer1.setLayout(pOILayer1Layout);
         pOILayer1Layout.setHorizontalGroup(
             pOILayer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 889, Short.MAX_VALUE)
+            .addGap(0, 893, Short.MAX_VALUE)
         );
         pOILayer1Layout.setVerticalGroup(
             pOILayer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 533, Short.MAX_VALUE)
+            .addGap(0, 537, Short.MAX_VALUE)
         );
 
         jLayeredPane3.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -232,7 +235,7 @@ public class AppWindow extends javax.swing.JFrame {
         jLayeredPane3.setLayout(jLayeredPane3Layout);
         jLayeredPane3Layout.setHorizontalGroup(
             jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 889, Short.MAX_VALUE)
+            .addGap(0, 893, Short.MAX_VALUE)
             .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,7 +243,7 @@ public class AppWindow extends javax.swing.JFrame {
         );
         jLayeredPane3Layout.setVerticalGroup(
             jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 533, Short.MAX_VALUE)
+            .addGap(0, 537, Short.MAX_VALUE)
             .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,6 +264,14 @@ public class AppWindow extends javax.swing.JFrame {
         );
 
         jLayeredPane1.add(mapPanel);
+
+        jOptionPanePOIOption.setForeground(new java.awt.Color(255, 51, 51));
+        jOptionPanePOIOption.setWantsInput(true);
+        jOptionPanePOIOption.setAutoscrolls(true);
+        jOptionPanePOIOption.setDoubleBuffered(true);
+        jOptionPanePOIOption.setVisible(false);
+        jLayeredPane1.setLayer(jOptionPanePOIOption, javax.swing.JLayeredPane.MODAL_LAYER);
+        jLayeredPane1.add(jOptionPanePOIOption);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -372,10 +383,18 @@ public class AppWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
         if(clickedPOI==null){
-            POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),"room XXX");
+            
+            jOptionPanePOIOption.setInputValue(jOptionPanePOIOption.showInputDialog("Your POI Name"));
+            //jOptionPanePOIOption.setVisible(true);
+            String POIName = (String)jOptionPanePOIOption.getInputValue();
+            if(POIName!=null){
+                POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),POIName);
             System.out.println(evt.getX()+" "+evt.getY());
             pOILayer1.addPOI(newPOI);
             pOILayer1.repaint();
+                
+            }
+            
             
         }
         System.out.println(clickedPOI);
@@ -421,6 +440,7 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane3;
+    private javax.swing.JOptionPane jOptionPanePOIOption;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
