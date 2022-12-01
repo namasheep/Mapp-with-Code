@@ -19,7 +19,7 @@ public class Mapp {
     private String imgURL = buildingPath+"/"+buildingNameFileList[floorIndex];
     public static void main(String[] args) {
         System.out.println("Hello World!");
-        AppWindow ll = new AppWindow();
+        AppWindow ll = new AppWindow(true);
         
     }
     public void changeIndex(){

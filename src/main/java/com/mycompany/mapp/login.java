@@ -6,6 +6,11 @@ package com.mycompany.mapp;
 
 import com.mycompany.mapp.AppWindow;
 import com.mycompany.mapp.mainMenu;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,8 +22,31 @@ public class login extends javax.swing.JFrame {
     /**
      * Creates new form login
      */
+
+    List<String> userUsernames;
+    List<String> adminUsernames;
+    List<String> userPasswords;
+    List<String> adminPasswords;
     public login() {
         initComponents();
+        userUsernames = loadUserData("src/main/resources/login/user-Username.txt");
+        adminUsernames = loadUserData("src/main/resources/login/admin-Username.txt");
+        userPasswords = loadUserData("src/main/resources/login/user-Password.txt");
+        adminPasswords = loadUserData("src/main/resources/login/admin-Password.txt");
+        
+    }
+    private List<String> loadUserData(String filePath){
+        List<String> data = null;
+        try{
+          BufferedReader reader = new BufferedReader(new FileReader(filePath));  
+          String line = reader.readLine();
+          data = Arrays.asList(line.split(","));
+        }
+        catch(IOException e){
+            
+        
+        }
+        return data;
     }
 
     /**
@@ -139,20 +167,29 @@ public class login extends javax.swing.JFrame {
         //setting users 
         //1. username = admin password = abc 
         //2. username = user password = 123 
-        
-        if(takenUsername.equals("admin")&&takenPassword.equals("abc")){
+        if(jComboBox1.getSelectedItem().equals("User")){
+            int userInd = userUsernames.indexOf(takenUsername);
+            if(userInd!=-1&&userPasswords.get(userInd).equals(takenPassword)){
             //open home page Login Success 
             //get this from nams code
-            AppWindow hpage = new AppWindow();
+            AppWindow hpage = new AppWindow(false);
             hpage.show(); //open homepage     
         }
-        //second user 
-        else if(takenUsername.equals("user")&&takenPassword.equals("123")){
+            
+        }
+        else if(jComboBox1.getSelectedItem().equals("Admin")){
+            int userInd = adminUsernames.indexOf(takenUsername);
+            if(userInd!=-1&&adminPasswords.get(userInd).equals(takenPassword)){
             //open home page Login Success 
             //get this from nams code
-            AppWindow hpage = new AppWindow();
-            hpage.show(); //open homepage   
+            AppWindow hpage = new AppWindow(true);
+            hpage.show(); //open homepage     
         }
+            
+        }
+        
+        //second user 
+        
         else{
             //if user or pass is incorrect 
             JOptionPane.showMessageDialog(this,"Incorrect Username or Password");

@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.JOptionPane" name="jOptionPanePOIOption">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="33" red="ff" type="rgb"/>
+        </Property>
+        <Property name="wantsInput" type="boolean" value="true"/>
+        <Property name="autoscrolls" type="boolean" value="true"/>
+        <Property name="doubleBuffered" type="boolean" value="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jOptionPanePOIOption.setVisible(false);"/>
+      </AuxValues>
+    </Component>
+    <Container class="javax.swing.JDialog" name="jDialog1">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+    <Menu class="com.mycompany.mapp.NavBarMenu" name="navBarMenu1">
+      <SubComponents>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="File"/>
+          </Properties>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit"/>
+          </Properties>
+        </Menu>
+      </SubComponents>
+    </Menu>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
   <SyntheticProperties>
+    <SyntheticProperty name="menuBar" type="java.lang.String" value="navBarMenu1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
@@ -28,7 +73,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jLayeredPane1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jLayeredPane1" alignment="0" pref="504" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -54,13 +99,13 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="581" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="536" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="zoomPanel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -70,14 +115,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="zoomPanel" min="-2" pref="50" max="-2" attributes="0"/>
+                              <Component id="zoomPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="388" max="32767" attributes="0"/>
+                              <EmptySpace pref="365" max="32767" attributes="0"/>
                               <Component id="jButton1" min="-2" pref="61" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -98,12 +144,11 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
-                              <Component id="jToggleButton1" alignment="0" min="-2" pref="39" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jToggleButton1" min="-2" pref="39" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="searchBox" pref="250" max="32767" attributes="0"/>
+                          <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="searchBox" pref="283" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -212,7 +257,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="mapImageScrollPane" alignment="0" pref="527" max="32767" attributes="0"/>
+                  <Component id="mapImageScrollPane" alignment="0" pref="504" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -290,6 +335,7 @@
                       </Events>
                       <AuxValues>
                         <AuxValue name="JLayeredPane.layer" type="java.lang.Integer" value="100"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="pOILayer1.setPOIsFromFile(POIPath+buildingName+&quot;/&quot;+buildingName+&quot;-&quot;+floorIndex+&quot;.txt&quot;);"/>
                       </AuxValues>
 
                       <Layout>
@@ -311,20 +357,6 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JOptionPane" name="jOptionPanePOIOption">
-          <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="33" green="33" red="ff" type="rgb"/>
-            </Property>
-            <Property name="wantsInput" type="boolean" value="true"/>
-            <Property name="autoscrolls" type="boolean" value="true"/>
-            <Property name="doubleBuffered" type="boolean" value="true"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JLayeredPane.layer" type="java.lang.Integer" value="200"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jOptionPanePOIOption.setVisible(false);"/>
-          </AuxValues>
-        </Component>
       </SubComponents>
       <LayoutCode>
         <CodeStatement>

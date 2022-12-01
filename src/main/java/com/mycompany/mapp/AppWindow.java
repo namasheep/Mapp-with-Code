@@ -13,11 +13,12 @@ import java.util.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
+import com.mycompany.mapp.navBar;
 
 
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 /**
  *
  * @author DELL
@@ -26,8 +27,11 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class AppWindow extends javax.swing.JFrame {
     boolean admin = true;
+    boolean navBarON = false;
     int floorIndex=0;
-    String buildingPath = "src/main/resources/images/Floors/MC";
+    String buildingName = "STAB";
+    String buildingPath = "src/main/resources/images/Floors/"+buildingName;
+    final String POIPath = "src/main/resources/POI info/";
     File buildingLocation = new File(buildingPath);
     String[] buildingNameFileList = buildingLocation.list();
     String imgURL = buildingPath+"/"+buildingNameFileList[floorIndex];
@@ -37,9 +41,11 @@ public class AppWindow extends javax.swing.JFrame {
     /**
      * Creates new form AppWindow
      */
-    public AppWindow() {
+    public AppWindow(boolean admin) {
         initComponents();
         AutoCompleteDecorator.decorate(searchBox);
+        this.admin = admin;
+        
         
 
     }
@@ -53,6 +59,8 @@ public class AppWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jOptionPanePOIOption = new javax.swing.JOptionPane();
+        jDialog1 = new javax.swing.JDialog();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         topPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -69,7 +77,26 @@ public class AppWindow extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         mapImage = new javax.swing.JLabel();
         pOILayer1 = new com.mycompany.mapp.POILayer();
-        jOptionPanePOIOption = new javax.swing.JOptionPane();
+        navBarMenu1 = new com.mycompany.mapp.NavBarMenu();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+
+        jOptionPanePOIOption.setForeground(new java.awt.Color(255, 51, 51));
+        jOptionPanePOIOption.setWantsInput(true);
+        jOptionPanePOIOption.setAutoscrolls(true);
+        jOptionPanePOIOption.setDoubleBuffered(true);
+        jOptionPanePOIOption.setVisible(false);
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -111,11 +138,11 @@ public class AppWindow extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchBox, 0, 250, Short.MAX_VALUE))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(searchBox, 0, 283, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,12 +191,12 @@ public class AppWindow extends javax.swing.JFrame {
                 .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(topPanelLayout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(581, Short.MAX_VALUE))
+                        .addGap(0, 536, Short.MAX_VALUE))
                     .addGroup(topPanelLayout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))))
+                        .addGap(31, 31, 31))))
         );
         topPanelLayout.setVerticalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,11 +204,12 @@ public class AppWindow extends javax.swing.JFrame {
                 .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(topPanelLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4))
                     .addGroup(topPanelLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 388, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 365, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17))
         );
@@ -211,6 +239,7 @@ public class AppWindow extends javax.swing.JFrame {
         );
 
         pOILayer1.setOpaque(false);
+        pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt");
         pOILayer1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pOILayer1MouseClicked(evt);
@@ -260,18 +289,18 @@ public class AppWindow extends javax.swing.JFrame {
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
+            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
         );
 
         jLayeredPane1.add(mapPanel);
 
-        jOptionPanePOIOption.setForeground(new java.awt.Color(255, 51, 51));
-        jOptionPanePOIOption.setWantsInput(true);
-        jOptionPanePOIOption.setAutoscrolls(true);
-        jOptionPanePOIOption.setDoubleBuffered(true);
-        jOptionPanePOIOption.setVisible(false);
-        jLayeredPane1.setLayer(jOptionPanePOIOption, javax.swing.JLayeredPane.MODAL_LAYER);
-        jLayeredPane1.add(jOptionPanePOIOption);
+        jMenu1.setText("File");
+        navBarMenu1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        navBarMenu1.add(jMenu2);
+
+        setJMenuBar(navBarMenu1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -281,7 +310,7 @@ public class AppWindow extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
         );
 
         pack();
@@ -294,20 +323,57 @@ public class AppWindow extends javax.swing.JFrame {
     private void searchBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBoxPopupMenuWillBecomeVisible
         // TODO add your handling code here:
     }//GEN-LAST:event_searchBoxPopupMenuWillBecomeVisible
-
+    
     private void searchBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBoxItemStateChanged
         // TODO add your handling code here:
         
         if(searchBox.getSelectedIndex()==-1){
             return;
         }
+
         floorIndex=searchBox.getSelectedIndex();
         imgURL = buildingPath+"/"+buildingNameFileList[floorIndex];
         mapImage.setIcon(new ImageIcon(imgURL));
+        
+        pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt");
         pOILayer1.saveAndReset();
+        
         zoomMul = 1;
+        
     }//GEN-LAST:event_searchBoxItemStateChanged
+    private void savePOIs(POI poiSave,String filePath){
+        
+        try{
+            FileWriter POIFile = new FileWriter(filePath,true);
+            BufferedWriter POIwrite = new BufferedWriter(POIFile);
+            
+                System.out.println(poiSave.toString());
+                POIwrite.write(poiSave.toString());
+                POIwrite.newLine();
+            
 
+            POIwrite.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    /*private ArrayList<POI> getPOIsFromFile(String filePath){
+        ArrayList<POI> POIRead = new ArrayList<POI>();
+        try{
+          BufferedReader reader = new BufferedReader(new FileReader(filePath));  
+          String line = null;
+          while((line = reader.readLine()) != null){
+              String[] POIComp = line.split(",");
+              POI newPOI = new POI(Integer.parseInt(POIComp[1]),Integer.parseInt(POIComp[2]),POIComp[0]);
+              POIRead.add(newPOI);
+          }
+        }
+        catch(IOException e){
+            
+        }
+        return POIRead;
+    }*/
     private void plusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusZoomButtonActionPerformed
         // TODO add your handling code here:
          // load the image to a imageIcon
@@ -382,19 +448,23 @@ public class AppWindow extends javax.swing.JFrame {
     private void pOILayer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseClicked
         // TODO add your handling code here:
         POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
-        if(clickedPOI==null){
+        if(clickedPOI==null && admin){
             
             jOptionPanePOIOption.setInputValue(jOptionPanePOIOption.showInputDialog("Your POI Name"));
             //jOptionPanePOIOption.setVisible(true);
             String POIName = (String)jOptionPanePOIOption.getInputValue();
-            if(POIName!=null){
-                POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),POIName);
-            System.out.println(evt.getX()+" "+evt.getY());
-            pOILayer1.addPOI(newPOI);
-            pOILayer1.repaint();
+            if(POIName!=null&&!POIName.equals("")){
+                POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),POIName,"test desc",0,true);
+                savePOIs(newPOI,POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt");
+                System.out.println(evt.getX()+" "+evt.getY());
+                pOILayer1.addPOI(newPOI);
+                pOILayer1.repaint();
                 
             }
             
+            
+        }
+        else{
             
         }
         System.out.println(clickedPOI);
@@ -431,15 +501,18 @@ public class AppWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AppWindow().setVisible(true);
+                new AppWindow(true).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JOptionPane jOptionPanePOIOption;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -449,6 +522,7 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane mapImageScrollPane;
     private javax.swing.JPanel mapPanel;
     private javax.swing.JButton minusZoomButton;
+    private com.mycompany.mapp.NavBarMenu navBarMenu1;
     private com.mycompany.mapp.POILayer pOILayer1;
     private javax.swing.JButton plusZoomButton;
     private javax.swing.JComboBox<String> searchBox;

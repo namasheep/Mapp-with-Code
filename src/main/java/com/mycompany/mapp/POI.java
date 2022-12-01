@@ -21,15 +21,24 @@ public class POI extends ImageIcon {
     int locY;
     int drawX;
     int drawY;
-    final String desc;
-    public POI(int x,int y,String name){
+    String name;
+    String desc;
+    final static int NAVIGATION = 0;
+    
+    final static int CLASSROOMS = 1;
+    boolean userCreated;
+    
+    int POIType;
+    public POI(int x,int y,String name,String desc,int type,boolean userCreated){
         locX = x;
         locY = y;
         drawX=x-16;
         drawY=y-32;
         System.out.println("X: "+locX+" Y: "+locY+" dX: "+drawX+" dY: "+drawY);
-        desc=name;
-        
+        this.name = name;
+        this.desc = desc;
+        POIType = type;
+        this.userCreated = userCreated;
         try{
             File myIcon = new File("src/main/resources/images/icons/pin.png");
             this.setImage(ImageIO.read(myIcon));
@@ -48,8 +57,9 @@ public class POI extends ImageIcon {
         
     }
     public String toString(){
-        return desc;
+        return locX+","+locY+","+name+","+desc+","+POIType+","+userCreated;
     }
+    
     
     
 }
