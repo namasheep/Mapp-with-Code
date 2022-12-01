@@ -22,9 +22,15 @@ public class POILayer extends JPanel {
     
     ArrayList<POI> navPOIs = new ArrayList<POI>();
     ArrayList<POI> classPOIs = new ArrayList<POI>();
+    ArrayList<POI> resPOIs = new ArrayList<POI>();
+    ArrayList<POI> labsPOIs = new ArrayList<POI>();
+    ArrayList<POI> csPOIs = new ArrayList<POI>();
     boolean displayUser = true;
     boolean displayNav = true;
-    boolean displayClass = false;
+    boolean displayClass = true;
+    boolean displayRes = true;
+    boolean displayLabs = true;
+    boolean displayCS = true;
     double sizeMul = 1;
     
     public POILayer(){
@@ -46,6 +52,35 @@ public class POILayer extends JPanel {
         }
         if(displayNav){
             for(POI i:navPOIs){
+                if((i.userCreated&&displayUser)||!i.userCreated){
+                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                }
+                
+            
+            }
+        }
+        if(displayRes){
+            for(POI i:resPOIs){
+                if((i.userCreated&&displayUser)||!i.userCreated){
+                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                }
+                
+            
+            }
+        }
+        
+        if(displayLabs){
+            for(POI i:labsPOIs){
+                if((i.userCreated&&displayUser)||!i.userCreated){
+                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                }
+                
+            
+            }
+        }
+        
+        if(displayCS){
+            for(POI i:csPOIs){
                 if((i.userCreated&&displayUser)||!i.userCreated){
                     g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
                 }
@@ -94,6 +129,54 @@ public class POILayer extends JPanel {
             }
             
         }
+        if(displayRes){
+            for(POI i:resPOIs){
+                if(i.contains(x,y,sizeMul)&&((i.userCreated&&displayUser)||!i.userCreated)){
+
+                    if(dist==-1){
+                        ret=i; 
+                    }
+                    else{
+                        if(calcDist(i.locX*sizeMul,i.locY*sizeMul-16,x,y)<dist){
+                            ret = i;
+                        }
+                    }
+                }
+            }
+            
+        }
+        if(displayLabs){
+            for(POI i:labsPOIs){
+                if(i.contains(x,y,sizeMul)&&((i.userCreated&&displayUser)||!i.userCreated)){
+
+                    if(dist==-1){
+                        ret=i; 
+                    }
+                    else{
+                        if(calcDist(i.locX*sizeMul,i.locY*sizeMul-16,x,y)<dist){
+                            ret = i;
+                        }
+                    }
+                }
+            }
+            
+        }
+        if(displayCS){
+            for(POI i:csPOIs){
+                if(i.contains(x,y,sizeMul)&&((i.userCreated&&displayUser)||!i.userCreated)){
+
+                    if(dist==-1){
+                        ret=i; 
+                    }
+                    else{
+                        if(calcDist(i.locX*sizeMul,i.locY*sizeMul-16,x,y)<dist){
+                            ret = i;
+                        }
+                    }
+                }
+            }
+            
+        }
         
         return ret;
     }
@@ -107,6 +190,15 @@ public class POILayer extends JPanel {
         }
         else if(newPOI.POIType==POI.NAVIGATION){
             navPOIs.add(newPOI);
+        }
+        else if(newPOI.POIType==POI.RESTURANTS){
+            resPOIs.add(newPOI);
+        }
+        else if(newPOI.POIType==POI.LABS){
+            labsPOIs.add(newPOI);
+        }
+        else if(newPOI.POIType==POI.CS){
+            csPOIs.add(newPOI);
         }
         
     }
@@ -148,21 +240,5 @@ public class POILayer extends JPanel {
         }
         
     }
-    public void savePOIs(String filePath){
-        
-        try{
-            FileWriter POIFile = new FileWriter(filePath,true);
-            BufferedWriter POIwrite = new BufferedWriter(POIFile);
-            for(POI i:classPOIs){
-                System.out.println(i.toString());
-                POIwrite.write(i.toString());
-                POIwrite.newLine();
-            }
-
-            POIwrite.close();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-    }
+    
 }

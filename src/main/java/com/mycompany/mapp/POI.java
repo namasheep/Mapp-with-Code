@@ -26,6 +26,10 @@ public class POI extends ImageIcon {
     final static int NAVIGATION = 0;
     
     final static int CLASSROOMS = 1;
+    final static int RESTURANTS = 2;
+    final static int LABS = 3;
+    final static int CS = 4;
+    
     boolean userCreated;
     
     int POIType;
