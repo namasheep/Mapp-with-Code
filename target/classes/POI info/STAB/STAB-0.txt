@@ -1,9 +1,2 @@
 
-316,191,oipwer,test desc,0,true
-506,146,wsdds,test desc,0,true
-422,146,sdfsd,test desc,0,true
-563,236,sdf,test desc,0,true
-567,338,asd,test desc,0,true
-812,311,sdfsd,test desc,0,true
-829,173,namashi's room,dsds,0,true
-704,444,test class,sadasd test class,1,true
+341,192,jjj,mkmk,0,true,0,STAB

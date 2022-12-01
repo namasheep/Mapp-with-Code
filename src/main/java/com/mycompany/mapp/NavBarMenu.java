@@ -17,13 +17,14 @@ import javax.swing.JMenuItem;
  * @author DELL
  */
 public class NavBarMenu extends JMenuBar {
+    JMenu menu, submenu;
+    JMenuItem menuItem;
+    //JRadioButtonMenuItem rbMenuItem;
+    JCheckBoxMenuItem cbMenuItem;
     public NavBarMenu(){
        
         
-        JMenu menu, submenu;
-        JMenuItem menuItem;
-        //JRadioButtonMenuItem rbMenuItem;
-        JCheckBoxMenuItem cbMenuItem;
+        
  
         //Create the menu bar.
         

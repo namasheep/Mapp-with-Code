@@ -1,0 +1,2 @@
+342,138,nmnm,poi,0,true,0,MC
+463,162,nmnm222,poi,0,true,1,MC

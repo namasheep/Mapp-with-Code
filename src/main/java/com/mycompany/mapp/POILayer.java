@@ -5,13 +5,16 @@
 package com.mycompany.mapp;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JPanel;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 
 
 /**
@@ -32,19 +35,38 @@ public class POILayer extends JPanel {
     boolean displayLabs = true;
     boolean displayCS = true;
     double sizeMul = 1;
-    
+    Image highIm;
+    POI highPOI=null;
+    POI dragPOI=null;
+    int dragX = 0;
+    int dragY = 0;
     public POILayer(){
         super();
+        try{
+            highIm=ImageIO.read(new File("src\\main\\resources\\images\\icons/pinHigh.png"));
+        }
+        catch(Exception e){
+            
+        }
         
         
     }
+    
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        
         if(displayClass){
             for(POI i:classPOIs){
-                if((i.userCreated&&displayUser)||!i.userCreated){
-                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
+                    
                 }
                 
             
@@ -52,8 +74,14 @@ public class POILayer extends JPanel {
         }
         if(displayNav){
             for(POI i:navPOIs){
-                if((i.userCreated&&displayUser)||!i.userCreated){
-                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
                 }
                 
             
@@ -61,8 +89,14 @@ public class POILayer extends JPanel {
         }
         if(displayRes){
             for(POI i:resPOIs){
-                if((i.userCreated&&displayUser)||!i.userCreated){
-                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
                 }
                 
             
@@ -71,8 +105,14 @@ public class POILayer extends JPanel {
         
         if(displayLabs){
             for(POI i:labsPOIs){
-                if((i.userCreated&&displayUser)||!i.userCreated){
-                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
                 }
                 
             
@@ -81,18 +121,38 @@ public class POILayer extends JPanel {
         
         if(displayCS){
             for(POI i:csPOIs){
-                if((i.userCreated&&displayUser)||!i.userCreated){
-                    g.drawImage(i.getImage(), (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
                 }
                 
             
             }
         }
+        if(dragPOI!=null){
+            paintDrag(g);
+        }
+        
         
     
     }
+    private void paintDrag(Graphics g){
+        g.drawImage(dragPOI.imIcon,(int)(dragX-16), (int)(dragY-32), this);
+    }
     public void setSizeMul(double mul){
         sizeMul=mul;
+    }
+    public void setHigh(POI newHigh){
+        if(highPOI!=null){
+            highPOI.highlighted=false;
+        }
+        newHigh.highlighted=true;
+        highPOI = newHigh;
     }
     public POI clickContain(int x,int y){
         POI ret=null;
@@ -202,12 +262,17 @@ public class POILayer extends JPanel {
         }
         
     }
-    public void saveAndReset(){
+    public void Reset(){
         /*
         save code
         */
 
-        
+        classPOIs.clear();
+        navPOIs.clear();
+        resPOIs.clear();
+        labsPOIs.clear();
+        csPOIs.clear();
+        highPOI=null;
         sizeMul = 1;
     }
     public ArrayList<POI> getPOIs(int type){
@@ -219,7 +284,7 @@ public class POILayer extends JPanel {
     /*public void setPOIs(ArrayList<POI> newList){
         myPOIs = newList;
     }*/
-    public void setPOIsFromFile(String filePath){
+    public void addApplicable(String filePath,String building,int floor){
         try{
           BufferedReader reader = new BufferedReader(new FileReader(filePath));  
           String line = null;
@@ -227,10 +292,45 @@ public class POILayer extends JPanel {
               if(!line.trim().isEmpty()){
                   System.out.println(line);
                     String[] POIComp = line.split(",");
-                    POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]));
+                    if(POIComp[7].equals(building)&&floor==Integer.parseInt(POIComp[6])){
+                        POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]),floor,POIComp[7]);
+                    addPOI(newPOI);
+                    }
+                    
+                }
+              }
+          
+                  
+              
+              
+        }
+        catch(IOException e){
+            
+        }
+        
+    }
+    public void moveingPOI(POI m){
+        if(dragPOI!=null){
+            dragPOI.dragging=false;
+        }
+        m.dragging = true;
+        dragPOI = m;
+    }
+    
+    public void setPOIsFromFile(String filePath,int Floor){
+        try{
+          BufferedReader reader = new BufferedReader(new FileReader(filePath));  
+          String line = null;
+          
+          while((line = reader.readLine()) != null){
+              if(!line.trim().isEmpty()){
+                  System.out.println(line);
+                    String[] POIComp = line.split(",");
+                    POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]),Floor,POIComp[7]);
                     addPOI(newPOI);
                 }
               }
+          
                   
               
               
