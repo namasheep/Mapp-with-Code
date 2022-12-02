@@ -54,7 +54,7 @@ public class AppWindow extends javax.swing.JFrame {
     public AppWindow(boolean admin,String username) {
         System.out.println(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
         this.username=username;
-        buildingsAll = Arrays.asList(getItemsFromFile("src\\main\\resources\\Building info/buildings.txt"));
+        buildingsAll = Arrays.asList(getItemsFromFile("src/main/resources/Building info/buildings.txt"));
         changeBuildPOIs();
         initComponents();
         AutoCompleteDecorator.decorate(searchBox);
@@ -1153,7 +1153,7 @@ public class AppWindow extends javax.swing.JFrame {
                     Files.copy(Paths.get(jTextFieldAddBuildingPath.getText()),out);
                     buildingsAll.add(jTextFieldAddBuilding.getText());
                     String buildsUpdate = commaList(buildingsAll);
-                    FileWriter buildFile = new FileWriter("C:\\Users\\DELL\\Documents\\NetBeansProjects\\Mapp\\src\\main\\resources\\Building info/buildings.txt",false);
+                    FileWriter buildFile = new FileWriter("src/main/resources/Building info/buildings.txt",false);
                     
                     buildFile.write(buildsUpdate);
                     buildFile.close();
