@@ -172,7 +172,7 @@ public class login extends javax.swing.JFrame {
             if(userInd!=-1&&userPasswords.get(userInd).equals(takenPassword)){
             //open home page Login Success 
             //get this from nams code
-            AppWindow hpage = new AppWindow(false);
+            AppWindow hpage = new AppWindow(false,"namashi");
             hpage.show(); //open homepage     
         }
             
@@ -182,7 +182,7 @@ public class login extends javax.swing.JFrame {
             if(userInd!=-1&&adminPasswords.get(userInd).equals(takenPassword)){
             //open home page Login Success 
             //get this from nams code
-            AppWindow hpage = new AppWindow(true);
+            AppWindow hpage = new AppWindow(true,"namashi");
             hpage.show(); //open homepage     
         }
             
