@@ -6,3 +6,4 @@
 520,460,poasid,kk,0,true,0,STADIUM
 
 1141,779,new,pp,0,true,0,MC
+1138,548,ppok,p,0,true,0,STAB
