@@ -1,2 +1,1 @@
-
-503,421,test2,mkmk,0,true,1,STAB
+1129,1773,Stairs 3 FL 2,stairs,0,false,1,STAB

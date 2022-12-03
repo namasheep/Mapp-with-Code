@@ -1,2 +1,3 @@
-
-341,192,jjj,mkmk,0,true,0,STAB
+234,602,jTextField1,jTextField2,0,false,0,STAB
+904,824,Stairs 2,stairs,0,false,0,STAB
+1152,1779,Stairs 3,stairs,0,false,0,STAB

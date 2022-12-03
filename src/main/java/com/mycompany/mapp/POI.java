@@ -31,6 +31,8 @@ public class POI {
     final static int RESTURANTS = 2;
     final static int LABS = 3;
     final static int CS = 4;
+    final static int AC = 5;
+    final static int WR = 6;
     int floor;
     String building;
     boolean userCreated;

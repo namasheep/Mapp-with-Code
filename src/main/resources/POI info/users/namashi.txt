@@ -1,2 +1,8 @@
-342,138,nmnm,poi,0,true,0,MC
-463,162,nmnm222,poi,0,true,1,MC
+
+1632,834,poipoi,,0,true,0,testB
+
+
+
+520,460,poasid,kk,0,true,0,STADIUM
+
+1141,779,new,pp,0,true,0,MC

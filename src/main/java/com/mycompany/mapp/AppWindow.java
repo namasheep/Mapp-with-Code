@@ -14,11 +14,14 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import com.mycompany.mapp.navBar;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.IntStream;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.io.FileUtils;
 
 
 
@@ -34,7 +37,7 @@ public class AppWindow extends javax.swing.JFrame {
     boolean admin = true;
     boolean navBarON = false;
     int floorIndex=0;
-    List<String> buildingsAll;
+    ArrayList<String> buildingsAll;
     String buildingName = "MC";
     String buildingPath = "src/main/resources/images/Floors/";
     String buildingLayerPath = "src/main/resources/images/Layers/"; 
@@ -44,22 +47,33 @@ public class AppWindow extends javax.swing.JFrame {
     String imgURL = buildingPath+buildingName+"/"+buildingNameFileList[floorIndex];
     double zoomMul = 1;
     ArrayList<POI> buildAllPOIs = new ArrayList<POI>();
+    ArrayList<POI> favPOIs = new ArrayList<POI>();
     String username;
     Integer xDrag = null;
     Integer yDrag = null;
+    POI draggedPOI = null;
+    POI selectedPOI = null;
+    boolean editing = false;
+    
     
     /**
      * Creates new form AppWindow
      */
     public AppWindow(boolean admin,String username) {
+        this.admin = admin;
         System.out.println(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
         this.username=username;
-        buildingsAll = Arrays.asList(getItemsFromFile("src/main/resources/Building info/buildings.txt"));
+        buildingsAll = getItemsFromFile("src/main/resources/Building info/buildings.txt");
         changeBuildPOIs();
         initComponents();
         AutoCompleteDecorator.decorate(searchBox);
-        AutoCompleteDecorator.decorate(BoxPOIAdd);
-        this.admin = admin;
+        
+        AutoCompleteDecorator.decorate(jComboBoxFavSearch);
+        
+        if(!this.admin){
+            loadFavouritesData();
+        }
+        
         
         
         
@@ -68,6 +82,66 @@ public class AppWindow extends javax.swing.JFrame {
         
         
 
+    }
+    private boolean favouriteIncludes(POI temp){
+        for(POI m:favPOIs){
+            if(m.equals(temp)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private void loadFavouritesData(){
+        favPOIs.clear();
+        try{
+          BufferedReader reader = new BufferedReader(new FileReader(POIPath+"favourites/"+"favourites.txt"));  
+          String line = null;
+          
+          while((line = reader.readLine()) != null){
+              if(!line.trim().isEmpty()){
+                  System.out.println(line);
+                  String[] POIComp = line.split(",");
+                  if(username.equals(POIComp[8])){
+                      POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]),Integer.parseInt(POIComp[6]),POIComp[7]);
+                      favPOIs.add(newPOI);
+                  }
+                  
+                  
+                }
+              }
+          
+                  
+              
+              
+        }
+        catch(IOException e){
+            
+        }
+        
+    }
+    private ArrayList<POI> getPOIFromFile(String filePath){
+        ArrayList<POI> m = new ArrayList<POI>();
+        try{
+          BufferedReader reader = new BufferedReader(new FileReader(filePath));  
+          String line = null;
+          
+          while((line = reader.readLine()) != null){
+              if(!line.trim().isEmpty()){
+                  System.out.println(line);
+                  String[] POIComp = line.split(",");
+                  POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]),Integer.parseInt(POIComp[6]),POIComp[7]);
+                  m.add(newPOI);
+                }
+              }
+          
+                  
+              
+              
+        }
+        catch(IOException e){
+            
+        }
+        return m;
     }
     private void changeBuildPOIs(){
         buildAllPOIs.clear();
@@ -119,15 +193,15 @@ public class AppWindow extends javax.swing.JFrame {
         
         
     }
-    private String[] getItemsFromFile(String filePath){
-        String[] temp = null;
+    private ArrayList<String> getItemsFromFile(String filePath){
+        ArrayList<String> temp = new ArrayList<String>();
         try{
           BufferedReader reader = new BufferedReader(new FileReader(filePath));  
           String line = null;
           while((line = reader.readLine()) != null){
               if(!line.trim().isEmpty()){
                   System.out.println(line);
-                    temp = line.split(",");
+                    temp.add(line);
                 }
               }
                   
@@ -173,21 +247,33 @@ public class AppWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jComboBoxRemoveFloorNum = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
+        jPanelEditPOI = new javax.swing.JPanel();
+        jLabelEditPOI = new javax.swing.JLabel();
+        jTextFieldEditPOIName = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldEditPOIDesc = new javax.swing.JTextField();
+        jComboBoxEditPOI = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        jCheckBoxDeletePOI = new javax.swing.JCheckBox();
+        jPanelFavSearch = new javax.swing.JPanel();
+        jLabelSearchFav = new javax.swing.JLabel();
+        jComboBoxFavSearch = new javax.swing.JComboBox<>();
+        jPanelDeleteBuilding = new javax.swing.JPanel();
+        jComboBoxDeleteBuild = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         topPanel = new javax.swing.JPanel();
         zoomPanel = new javax.swing.JPanel();
         plusZoomButton = new javax.swing.JButton();
         minusZoomButton = new javax.swing.JButton();
         jPanelLayerButtons = new javax.swing.JPanel();
-        jButtonAccessibility = new javax.swing.JButton();
-        jButtonWashrooms = new javax.swing.JButton();
-        jButtonClassrooms = new javax.swing.JButton();
-        jButtonRestaurants = new javax.swing.JButton();
-        jButtonLabs = new javax.swing.JButton();
-        jButtonUserPOIs = new javax.swing.JButton();
-        jButtonLegend = new javax.swing.JButton();
-        jButtonNavigation = new javax.swing.JButton();
-        jButtonCSPOIs = new javax.swing.JButton();
+        jToggleButtonNav = new javax.swing.JToggleButton();
+        jToggleButtonClass = new javax.swing.JToggleButton();
+        jToggleButtonRes = new javax.swing.JToggleButton();
+        jToggleButtonLab = new javax.swing.JToggleButton();
+        jToggleButtonCS = new javax.swing.JToggleButton();
+        jToggleButtonAC = new javax.swing.JToggleButton();
+        jToggleButtonWR = new javax.swing.JToggleButton();
         jButtonLayers = new javax.swing.JButton();
         jPanelUpDown = new javax.swing.JPanel();
         jButtonUpFloor = new javax.swing.JButton();
@@ -196,6 +282,11 @@ public class AppWindow extends javax.swing.JFrame {
         jList1 = new javax.swing.JList<>();
         searchBox = new javax.swing.JComboBox<>();
         jPanelPOIInfo = new javax.swing.JPanel();
+        jLabelPOIName = new javax.swing.JLabel();
+        jLabelPOIDesc = new javax.swing.JLabel();
+        jButtonEditPOI = new javax.swing.JButton();
+        jButtonFav = new javax.swing.JButton();
+        jLabelFloor = new javax.swing.JLabel();
         mapPanel = new javax.swing.JPanel();
         mapImageScrollPane = new javax.swing.JScrollPane();
         jLayeredPane3 = new javax.swing.JLayeredPane();
@@ -211,13 +302,14 @@ public class AppWindow extends javax.swing.JFrame {
         jLabelWC = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu6 = new javax.swing.JMenu();
-        jCheckBoxFav = new javax.swing.JCheckBoxMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenu3.setVisible(admin);
+        jMenu3.setVisible(this.admin);
         jMenuItemAddBuilding = new javax.swing.JMenuItem();
         jMenuItemAddFloor = new javax.swing.JMenuItem();
         jMenuItemRemoveBuilding = new javax.swing.JMenuItem();
         jMenuItemRemoveFloor = new javax.swing.JMenuItem();
+        jMenuLogout = new javax.swing.JMenu();
+        jMenuItemLogout = new javax.swing.JMenuItem();
 
         jOptionPanePOIOption.setForeground(new java.awt.Color(255, 51, 51));
         jOptionPanePOIOption.setWantsInput(true);
@@ -229,7 +321,12 @@ public class AppWindow extends javax.swing.JFrame {
 
         jLabelPOIAddDesc.setText("Description");
 
-        BoxPOIAdd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Navigation", "Classroom", "Resturant", "Lab" }));
+        BoxPOIAdd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Navigation", "Classroom", "Resturant", "Lab", "CS POI", "Accessibility", "Washroom" }));
+        BoxPOIAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxPOIAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelAddPOILayout = new javax.swing.GroupLayout(jPanelAddPOI);
         jPanelAddPOI.setLayout(jPanelAddPOILayout);
@@ -402,6 +499,110 @@ public class AppWindow extends javax.swing.JFrame {
                 .addContainerGap(165, Short.MAX_VALUE))
         );
 
+        jLabelEditPOI.setText("Name");
+
+        jLabel5.setText("Desc.");
+
+        jComboBoxEditPOI.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Navigation", "Classroom", "Resturant", "Lab", "CS POI" }));
+
+        jLabel4.setText("POI Type");
+
+        jCheckBoxDeletePOI.setText("Delete");
+        jCheckBoxDeletePOI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDeletePOIActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelEditPOILayout = new javax.swing.GroupLayout(jPanelEditPOI);
+        jPanelEditPOI.setLayout(jPanelEditPOILayout);
+        jPanelEditPOILayout.setHorizontalGroup(
+            jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEditPOILayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelEditPOILayout.createSequentialGroup()
+                        .addGroup(jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabelEditPOI))
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldEditPOIName, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                            .addComponent(jTextFieldEditPOIDesc)))
+                    .addGroup(jPanelEditPOILayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jComboBoxEditPOI, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBoxDeletePOI))))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        jPanelEditPOILayout.setVerticalGroup(
+            jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEditPOILayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelEditPOI)
+                    .addComponent(jTextFieldEditPOIName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanelEditPOILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextFieldEditPOIDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jComboBoxEditPOI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxDeletePOI)
+                .addGap(13, 13, 13))
+        );
+
+        jLabelSearchFav.setText("Search Favourites");
+
+        javax.swing.GroupLayout jPanelFavSearchLayout = new javax.swing.GroupLayout(jPanelFavSearch);
+        jPanelFavSearch.setLayout(jPanelFavSearchLayout);
+        jPanelFavSearchLayout.setHorizontalGroup(
+            jPanelFavSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFavSearchLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabelSearchFav)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBoxFavSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        jPanelFavSearchLayout.setVerticalGroup(
+            jPanelFavSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelFavSearchLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(jPanelFavSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelSearchFav, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxFavSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(63, Short.MAX_VALUE))
+        );
+
+        jLabel6.setText("Delete Building");
+
+        javax.swing.GroupLayout jPanelDeleteBuildingLayout = new javax.swing.GroupLayout(jPanelDeleteBuilding);
+        jPanelDeleteBuilding.setLayout(jPanelDeleteBuildingLayout);
+        jPanelDeleteBuildingLayout.setHorizontalGroup(
+            jPanelDeleteBuildingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDeleteBuildingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBoxDeleteBuild, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+        );
+        jPanelDeleteBuildingLayout.setVerticalGroup(
+            jPanelDeleteBuildingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDeleteBuildingLayout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addGroup(jPanelDeleteBuildingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxDeleteBuild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addContainerGap(163, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLayeredPane1.setLayout(new javax.swing.OverlayLayout(jLayeredPane1));
@@ -428,106 +629,71 @@ public class AppWindow extends javax.swing.JFrame {
         zoomPanel.add(minusZoomButton);
 
         jPanelLayerButtons.setBackground(new java.awt.Color(204, 204, 255));
+        jPanelLayerButtons.setVisible(false);
+        jPanelLayerButtons.setLayout(new java.awt.GridLayout());
 
-        jButtonAccessibility.setText("Accessibility");
-        jButtonAccessibility.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonAccessibilityMouseClicked(evt);
+        jToggleButtonNav.setSelected(true);
+        jToggleButtonNav.setText("Navigation");
+        jToggleButtonNav.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonNavItemStateChanged(evt);
             }
         });
+        jPanelLayerButtons.add(jToggleButtonNav);
 
-        jButtonWashrooms.setText("Washrooms");
-        jButtonWashrooms.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonWashroomsMouseClicked(evt);
+        jToggleButtonClass.setSelected(true);
+        jToggleButtonClass.setText("Classrooms");
+        jToggleButtonClass.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonClassItemStateChanged(evt);
             }
         });
+        jPanelLayerButtons.add(jToggleButtonClass);
 
-        jButtonClassrooms.setText("Classrooms");
-        jButtonClassrooms.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonClassroomsMouseClicked(evt);
+        jToggleButtonRes.setSelected(true);
+        jToggleButtonRes.setText("Resturants");
+        jToggleButtonRes.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonResItemStateChanged(evt);
             }
         });
+        jPanelLayerButtons.add(jToggleButtonRes);
 
-        jButtonRestaurants.setText("Restaurants");
-        jButtonRestaurants.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonRestaurantsMouseClicked(evt);
+        jToggleButtonLab.setSelected(true);
+        jToggleButtonLab.setText("Labs");
+        jToggleButtonLab.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonLabItemStateChanged(evt);
             }
         });
+        jPanelLayerButtons.add(jToggleButtonLab);
 
-        jButtonLabs.setText("Labs");
-        jButtonLabs.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonLabsMouseClicked(evt);
+        jToggleButtonCS.setSelected(true);
+        jToggleButtonCS.setText("CS POIs");
+        jToggleButtonCS.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonCSItemStateChanged(evt);
             }
         });
+        jPanelLayerButtons.add(jToggleButtonCS);
 
-        jButtonUserPOIs.setText("User POIs");
-        jButtonUserPOIs.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonUserPOIsMouseClicked(evt);
+        jToggleButtonAC.setSelected(true);
+        jToggleButtonAC.setText("Accessibility");
+        jToggleButtonAC.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonACItemStateChanged(evt);
             }
         });
+        jPanelLayerButtons.add(jToggleButtonAC);
 
-        jButtonLegend.setText("Legend");
-
-        jButtonNavigation.setText("Navigation");
-        jButtonNavigation.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonNavigationMouseClicked(evt);
+        jToggleButtonWR.setSelected(true);
+        jToggleButtonWR.setText("Washrooms");
+        jToggleButtonWR.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonWRItemStateChanged(evt);
             }
         });
-
-        jButtonCSPOIs.setText("CS POIs");
-        jButtonCSPOIs.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonCSPOIsMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanelLayerButtonsLayout = new javax.swing.GroupLayout(jPanelLayerButtons);
-        jPanelLayerButtons.setLayout(jPanelLayerButtonsLayout);
-        jPanelLayerButtonsLayout.setHorizontalGroup(
-            jPanelLayerButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelLayerButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonLegend, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonAccessibility, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonWashrooms, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonNavigation, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonClassrooms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonRestaurants, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonLabs, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonUserPOIs, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonCSPOIs, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-        jPanelLayerButtonsLayout.setVerticalGroup(
-            jPanelLayerButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayerButtonsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanelLayerButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButtonCSPOIs, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
-                    .addComponent(jButtonLegend, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonUserPOIs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonLabs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonRestaurants, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonClassrooms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonAccessibility, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonWashrooms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonNavigation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
+        jPanelLayerButtons.add(jToggleButtonWR);
 
         jButtonLayers.setText("Layers");
         jButtonLayers.addActionListener(new java.awt.event.ActionListener() {
@@ -598,49 +764,88 @@ public class AppWindow extends javax.swing.JFrame {
             }
         });
 
+        jButtonEditPOI.setText("Edit");
+        jButtonEditPOI.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonEditPOIMouseClicked(evt);
+            }
+        });
+
+        jButtonFav.setText("Favourite");
+        jButtonFav.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonFavMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelPOIInfoLayout = new javax.swing.GroupLayout(jPanelPOIInfo);
         jPanelPOIInfo.setLayout(jPanelPOIInfoLayout);
         jPanelPOIInfoLayout.setHorizontalGroup(
             jPanelPOIInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 131, Short.MAX_VALUE)
+            .addGroup(jPanelPOIInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelPOIInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelPOIInfoLayout.createSequentialGroup()
+                        .addComponent(jButtonFav, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonEditPOI, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jLabelPOIDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPOIInfoLayout.createSequentialGroup()
+                .addContainerGap(54, Short.MAX_VALUE)
+                .addComponent(jLabelPOIName, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
         jPanelPOIInfoLayout.setVerticalGroup(
             jPanelPOIInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 117, Short.MAX_VALUE)
+            .addGroup(jPanelPOIInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelPOIName, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelPOIDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelPOIInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonEditPOI, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(jButtonFav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
+
+        jLabelFloor.setForeground(new java.awt.Color(102, 102, 255));
+        jLabelFloor.setText("Floor: "+floorIndex);
 
         javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
         topPanel.setLayout(topPanelLayout);
         topPanelLayout.setHorizontalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(topPanelLayout.createSequentialGroup()
-                        .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanelUpDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(0, 1158, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topPanelLayout.createSequentialGroup()
-                        .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(topPanelLayout.createSequentialGroup()
-                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanelPOIInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(topPanelLayout.createSequentialGroup()
-                                .addComponent(jButtonLayers, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanelLayerButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(22, 22, 22))))
+                        .addComponent(jButtonLayers, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 233, Short.MAX_VALUE)
+                        .addComponent(jPanelLayerButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 233, Short.MAX_VALUE)
+                        .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22))
+                    .addGroup(topPanelLayout.createSequentialGroup()
+                        .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabelFloor, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanelUpDown, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanelPOIInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))))
         );
         topPanelLayout.setVerticalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topPanelLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                .addComponent(jLabelFloor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelUpDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -650,6 +855,7 @@ public class AppWindow extends javax.swing.JFrame {
                     .addComponent(jPanelLayerButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(31, 31, 31))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanelPOIInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(zoomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -682,8 +888,8 @@ public class AppWindow extends javax.swing.JFrame {
 
         pOILayer1.setOpaque(false);
         pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
-        if(!admin){
-            pOILayer1.addApplicable(POIPath+"user/"+username+".txt",buildingName,floorIndex);
+        if(!this.admin){
+            pOILayer1.addApplicable(POIPath+"users/"+username+".txt",buildingName,floorIndex);
         }
         pOILayer1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -699,6 +905,11 @@ public class AppWindow extends javax.swing.JFrame {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 pOILayer1MouseReleased(evt);
+            }
+        });
+        pOILayer1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                pOILayer1FocusLost(evt);
             }
         });
 
@@ -814,7 +1025,7 @@ public class AppWindow extends javax.swing.JFrame {
         mapPanel.setLayout(mapPanelLayout);
         mapPanelLayout.setHorizontalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1279, Short.MAX_VALUE)
+            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1297, Short.MAX_VALUE)
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -824,11 +1035,12 @@ public class AppWindow extends javax.swing.JFrame {
         jLayeredPane1.add(mapPanel);
 
         jMenu6.setText("Favourites");
-
-        jCheckBoxFav.setSelected(true);
-        jCheckBoxFav.setText("Favourites");
-        jMenu6.add(jCheckBoxFav);
-
+        jMenu6.setVisible(!this.admin);
+        jMenu6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu6MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu6);
 
         jMenu3.setText("Edit");
@@ -850,6 +1062,16 @@ public class AppWindow extends javax.swing.JFrame {
         jMenu3.add(jMenuItemAddFloor);
 
         jMenuItemRemoveBuilding.setText("Remove Building");
+        jMenuItemRemoveBuilding.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuItemRemoveBuildingMouseClicked(evt);
+            }
+        });
+        jMenuItemRemoveBuilding.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRemoveBuildingActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemRemoveBuilding);
 
         jMenuItemRemoveFloor.setText("Remove Floor");
@@ -861,6 +1083,18 @@ public class AppWindow extends javax.swing.JFrame {
         jMenu3.add(jMenuItemRemoveFloor);
 
         jMenuBar1.add(jMenu3);
+
+        jMenuLogout.setText("Logout");
+
+        jMenuItemLogout.setText("Logout");
+        jMenuItemLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLogoutActionPerformed(evt);
+            }
+        });
+        jMenuLogout.add(jMenuItemLogout);
+
+        jMenuBar1.add(jMenuLogout);
 
         setJMenuBar(jMenuBar1);
 
@@ -895,6 +1129,43 @@ public class AppWindow extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+        private void saveBuilding(String Build,String filePath){
+            try{
+            
+            FileWriter POIFile = new FileWriter(filePath,true);
+            BufferedWriter POIwrite = new BufferedWriter(POIFile);
+            
+                System.out.println(Build);
+                POIwrite.write(Build);
+                POIwrite.newLine();
+            
+
+            POIwrite.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        }
+        private void deleteBuilding(String nameB){
+            Path path = Paths.get("src/main/resources/Building info/buildings.txt");
+            Charset charset = StandardCharsets.UTF_8;
+
+            try{
+                String content = new String(Files.readAllBytes(path), charset);
+
+
+                    
+                    content = content.replaceAll(nameB,"");
+
+
+                Files.write(path, content.getBytes(charset));
+            }
+            catch(Exception e){
+                System.out.println(e+" ChangePOI");
+
+            }
+            
+        }
     private void mapImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mapImageMouseClicked
         // TODO add your handling code here:
 
@@ -904,9 +1175,8 @@ public class AppWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
         if(clickedPOI==null){
-            if(buildingName.equals("MC")){
-                BoxPOIAdd.addItem("CS Room");
-            }
+            resetSelect();
+            
             int result = jOptionPanePOIOption.showConfirmDialog(null, jPanelAddPOI, 
                "POI Info", jOptionPanePOIOption.OK_CANCEL_OPTION);
 
@@ -916,10 +1186,7 @@ public class AppWindow extends javax.swing.JFrame {
             if(result==JOptionPane.OK_OPTION){
                 
                 POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),jTextFieldPOIAddName.getText(),jTextFieldPOIAddDesc.getText(),BoxPOIAdd.getSelectedIndex(),!admin,floorIndex,buildingName);
-                if(buildingName.equals("MC")){
-                    String[] temp = {"Navigation","Classroom","Resturant","Lab"};
-                    BoxPOIAdd.setModel(new DefaultComboBoxModel(temp));
-                }
+                
                 if(!admin){
                     savePOIs(newPOI,POIPath+"users"+"/"+username+".txt");
                 }
@@ -928,18 +1195,24 @@ public class AppWindow extends javax.swing.JFrame {
                 }
                 
                 changeBuildPOIs();
+                editing = true;
                 searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                searchBox.setSelectedItem(newPOI);
+                editing = false;
                 System.out.println(evt.getX()+" "+evt.getY());
                 pOILayer1.addPOI(newPOI);
+                pOILayer1.setHigh(newPOI);
                 pOILayer1.repaint();
                 
             }
             
             
         }
-        else if(clickedPOI!=null&&!admin){
+        else if(clickedPOI!=null){
             System.out.println("mmmHigh");
             pOILayer1.setHigh(clickedPOI);
+            selectedPOI = clickedPOI;
+            upDatePOIInfoLabel();
             pOILayer1.repaint();
             
             
@@ -947,7 +1220,33 @@ public class AppWindow extends javax.swing.JFrame {
         System.out.println(clickedPOI);
         
     }//GEN-LAST:event_pOILayer1MouseClicked
-
+    private void upDatePOIInfoLabel(){
+        jPanelPOIInfo.setVisible(true);
+        jLabelPOIName.setText(selectedPOI.name);
+        jLabelPOIDesc.setText(selectedPOI.desc);
+        System.out.println(favPOIs);
+        if(selectedPOI.userCreated||admin){
+            jButtonFav.setVisible(false);
+        }
+        else{
+            jButtonFav.setVisible(true);
+            if(favouriteIncludes(selectedPOI)){
+                jButtonFav.setText("Unfavourite");
+            }
+            else{
+                jButtonFav.setText("Favourite");
+            }
+            
+        }
+            
+        if(selectedPOI.userCreated||(admin&&!selectedPOI.userCreated)){
+            jButtonEditPOI.setVisible(true);
+        }
+        else{
+            jButtonEditPOI.setVisible(false);
+        }
+        
+    }
     private void jButtonLayersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLayersActionPerformed
         if (jPanelLayerButtons.isShowing()) {
             jPanelLayerButtons.setVisible(false);
@@ -955,20 +1254,22 @@ public class AppWindow extends javax.swing.JFrame {
         else {
             jPanelLayerButtons.setVisible(true);
         }
+        resetSelect();
     }//GEN-LAST:event_jButtonLayersActionPerformed
 
     private void minusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minusZoomButtonActionPerformed
         // TODO add your handling code here:
+        //resetSelect();
         File im = new File(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
-        File imAC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
-        File imWC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png");
+        //File imAC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
+        //File imWC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png");
         try{
             System.out.println(im.getPath());
             zoomMul*=0.5;
             Image image = ImageIO.read(im); // transform it
             Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
             mapImage.setIcon(new ImageIcon(newimg));
-            try{
+            /*try{
                 image = ImageIO.read(imAC); // transform it
                 newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
                 jLabelAC.setIcon(new ImageIcon(newimg));
@@ -978,7 +1279,7 @@ public class AppWindow extends javax.swing.JFrame {
             }
             catch(Exception e){
                 
-            }
+            }*/
             
             
             Point old = mapImageScrollPane.getViewport().getViewPosition();
@@ -1011,9 +1312,10 @@ public class AppWindow extends javax.swing.JFrame {
     private void plusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusZoomButtonActionPerformed
         // TODO add your handling code here:
         // load the image to a imageIcon
+        //resetSelect();
         File im = new File(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
-        File imAC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
-        File imWC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png");
+        //File imAC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
+        //File imWC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png");
 
         try{
             System.out.println(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
@@ -1021,7 +1323,7 @@ public class AppWindow extends javax.swing.JFrame {
             Image image = ImageIO.read(im); // transform it
             Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
             mapImage.setIcon(new ImageIcon(newimg));
-            try{
+            /*try{
                 image = ImageIO.read(imAC); // transform it
                 newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
                 jLabelAC.setIcon(new ImageIcon(newimg));
@@ -1031,7 +1333,7 @@ public class AppWindow extends javax.swing.JFrame {
             }
             catch(Exception e){
                 
-            }
+            }*/
             
             
             Rectangle view = mapImageScrollPane.getViewport().getViewRect();
@@ -1057,87 +1359,11 @@ public class AppWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_searchBoxPopupMenuWillBecomeVisible
     private void reloadImages(){
         mapImage.setIcon(new ImageIcon(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png"));
-        jLabelAC.setIcon(new ImageIcon(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png"));
-        jLabelWC.setIcon(new ImageIcon(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png"));
+        jLabelFloor.setText("Floor: "+floorIndex);
+        //jLabelAC.setIcon(new ImageIcon(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png"));
+        //jLabelWC.setIcon(new ImageIcon(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png"));
 
     }
-    private void searchBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBoxItemStateChanged
-        // TODO add your handling code here:
-
-        if(searchBox.getSelectedIndex()==-1){
-            return;
-        }
-
-        //floorIndex=searchBox.getSelectedIndex();
-        POI selP = buildAllPOIs.get(searchBox.getSelectedIndex());
-        
-        
-            System.out.println(buildAllPOIs.get(0).toStringSave());
-            System.out.println(selP+":m,m,:   "+searchBox.getSelectedIndex());
-            floorIndex = selP.floor;
-            System.out.println(floorIndex+": daspdokaspodk");
-            zoomMul = 1;
-            reloadImages();
-            pOILayer1.Reset();
-            pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
-            if(!admin){
-              pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
-            }
-            
-            pOILayer1.repaint();
-
-            
-        
-        
-
-    }//GEN-LAST:event_searchBoxItemStateChanged
-
-    private void jButtonClassroomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonClassroomsMouseClicked
-        // TODO add your handling code here:
-        pOILayer1.displayClass = !pOILayer1.displayClass;
-        pOILayer1.repaint();
-    }//GEN-LAST:event_jButtonClassroomsMouseClicked
-
-    private void jButtonRestaurantsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRestaurantsMouseClicked
-        // TODO add your handling code here:
-        pOILayer1.displayRes = !pOILayer1.displayRes;
-        pOILayer1.repaint();
-    }//GEN-LAST:event_jButtonRestaurantsMouseClicked
-
-    private void jButtonLabsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLabsMouseClicked
-        // TODO add your handling code here:
-        pOILayer1.displayLabs = !pOILayer1.displayLabs;
-        pOILayer1.repaint();
-    }//GEN-LAST:event_jButtonLabsMouseClicked
-
-    private void jButtonUserPOIsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonUserPOIsMouseClicked
-        // TODO add your handling code here:
-        pOILayer1.displayUser = !pOILayer1.displayUser;
-        pOILayer1.repaint();
-    }//GEN-LAST:event_jButtonUserPOIsMouseClicked
-
-    private void jButtonNavigationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonNavigationMouseClicked
-        // TODO add your handling code here:
-        pOILayer1.displayNav = !pOILayer1.displayNav;
-        pOILayer1.repaint();
-    }//GEN-LAST:event_jButtonNavigationMouseClicked
-
-    private void jButtonCSPOIsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCSPOIsMouseClicked
-        // TODO add your handling code here:
-        pOILayer1.displayCS = !pOILayer1.displayCS;
-        pOILayer1.repaint();
-    }//GEN-LAST:event_jButtonCSPOIsMouseClicked
-
-    private void jButtonAccessibilityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAccessibilityMouseClicked
-        // TODO add your handling code here:
-        jLabelAC.setVisible(!jLabelAC.isShowing());
-    }//GEN-LAST:event_jButtonAccessibilityMouseClicked
-
-    private void jButtonWashroomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonWashroomsMouseClicked
-        // TODO add your handling code here:
-        jLabelWC.setVisible(!jLabelWC.isShowing());
-    }//GEN-LAST:event_jButtonWashroomsMouseClicked
-
     private void jMenuItemAddBuildingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddBuildingActionPerformed
         // TODO add your handling code here:
         int result = jOptionPaneEdit.showConfirmDialog(null,jPanelAddBuilding,"Adding Building",JOptionPane.OK_CANCEL_OPTION);
@@ -1152,11 +1378,29 @@ public class AppWindow extends javax.swing.JFrame {
                     Files.createDirectories(out.getParent());
                     Files.copy(Paths.get(jTextFieldAddBuildingPath.getText()),out);
                     buildingsAll.add(jTextFieldAddBuilding.getText());
-                    String buildsUpdate = commaList(buildingsAll);
-                    FileWriter buildFile = new FileWriter("src/main/resources/Building info/buildings.txt",false);
+                    saveBuilding(jTextFieldAddBuilding.getText(),"src/main/resources/Building info/buildings.txt");
+                    buildingsAll = getItemsFromFile("src/main/resources/Building info/buildings.txt");
+                    int oldsel = jList1.getSelectedIndex();
+                    jList1.setModel(new DefaultComboBoxModel(buildingsAll.toArray()));
                     
-                    buildFile.write(buildsUpdate);
-                    buildFile.close();
+                    jList1.setSelectedIndex(jList1.getModel().getSize()-1);
+                    buildingName = jList1.getSelectedValue();
+                    resetSelect();
+                    
+                    zoomMul = 1;
+                    floorIndex=0;
+                    changeBuildPOIs();
+                    //searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                    reloadImages();
+
+                    pOILayer1.Reset();
+                    pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+                    if(!admin){
+                          pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+                        }
+                    
+                    pOILayer1.repaint();
+                   
                     
             
 
@@ -1229,6 +1473,7 @@ public class AppWindow extends javax.swing.JFrame {
 
     private void jButtonUpFloorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonUpFloorMouseClicked
         // TODO add your handling code here:
+        resetSelect();
         File floorList = new File(buildingPath+buildingName);
         int maxFloor = floorList.list().length;
         if(floorIndex==maxFloor-1){
@@ -1239,6 +1484,7 @@ public class AppWindow extends javax.swing.JFrame {
             zoomMul = 1;
             reloadImages();
             pOILayer1.Reset();
+            
             pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
             if(!admin){
               pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
@@ -1248,9 +1494,38 @@ public class AppWindow extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_jButtonUpFloorMouseClicked
+    private void searchCenter(){
+        
+        if(searchBox.getSelectedIndex()==-1){
+            return;
+        }
 
+        //floorIndex=searchBox.getSelectedIndex();
+        POI selP = buildAllPOIs.get(searchBox.getSelectedIndex());
+        resetSelect();
+        buildingName = selP.building;
+        zoomMul = 1;
+        floorIndex=selP.floor;
+        changeBuildPOIs();
+        //searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+        reloadImages();
+        
+        pOILayer1.Reset();
+        pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+        if(!admin){
+              pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+            }
+        pOILayer1.findAndSetHigh(selP);
+        selectedPOI = pOILayer1.highPOI;
+        upDatePOIInfoLabel();
+        toggleCorrect(selP);
+        
+        pOILayer1.repaint();
+        
+    }
     private void jButtonDownFloorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownFloorMouseClicked
         // TODO add your handling code here:
+        resetSelect();
         if(floorIndex<=0){
             floorIndex=0;
         }
@@ -1271,6 +1546,7 @@ public class AppWindow extends javax.swing.JFrame {
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
         // TODO add your handling code here:state
+        resetSelect();
         buildingName = jList1.getSelectedValue();
         zoomMul = 1;
         floorIndex=0;
@@ -1295,17 +1571,16 @@ public class AppWindow extends javax.swing.JFrame {
     private void jMenuItemRemoveFloorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRemoveFloorActionPerformed
         // TODO add your handling code here:
         jComboBoxRemoveFloorBuild.setModel(new DefaultComboBoxModel(buildingsAll.toArray()));
-        
+        setRemoveComboFloor();
         int result = jOptionPaneEdit.showConfirmDialog(null,jPanelRemoveFloor,"Remove Floor",JOptionPane.OK_CANCEL_OPTION);
         if(result == JOptionPane.OK_OPTION){
             try{
                 
                 //buildingsAll.contains(jTextFieldAddBuilding.getText())||
-                if(jComboBoxRemoveFloorBuild.getSelectedItem().equals("MC")||jComboBoxRemoveFloorBuild.getSelectedItem().equals("STAB")||jComboBoxRemoveFloorBuild.getSelectedItem().equals("STADIUM")||jComboBoxRemoveFloorNum.getItemCount()==1){
-                    System.out.println("DSDSDSD");
-                    throw new Exception("Cannot Edit Those files");
-                }
-                else{
+                
+                    if(jComboBoxRemoveFloorNum.getItemCount()==1){
+                        throw new Exception("cannot delete last floor");
+                    }
                     jList1.setSelectedIndex(0);
                     /*buildingName = "MC";
                     floorIndex = 0;
@@ -1321,78 +1596,530 @@ public class AppWindow extends javax.swing.JFrame {
                     File deleteFloorPOI = new File(POIPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"-"+jComboBoxRemoveFloorNum.getSelectedIndex()+".txt");
                     deleteFloor.delete();
                     deleteFloorPOI.delete();
-                    
+                    deleteFloorBuildingPOI(jComboBoxRemoveFloorBuild.getSelectedItem().toString(),(""+jComboBoxRemoveFloorNum.getSelectedIndex()),POIPath+"favourites/favourites.txt");
+                    File[] userStuff = new File(POIPath+"users").listFiles();
                     for(int i = jComboBoxRemoveFloorNum.getSelectedIndex()+1;i<jComboBoxRemoveFloorNum.getItemCount();i++){
                         
                         File newName = new File(buildingPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem()+"-"+(i-1)+".png");
                         File oldName = new File(buildingPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem()+"-"+i+".png");
                         oldName.renameTo(newName);
+                        
                         newName = new File(POIPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"-"+(i-1)+".txt");
                         
                         oldName = new File(POIPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"-"+i+".txt");
                         System.out.println(oldName);
                         oldName.renameTo(newName);
+                        ArrayList<POI> temp = getPOIFromFile(newName.getAbsolutePath());
+                        for(POI k:temp){
+                            POI tempPOI = new POI(k.locX,k.locY,k.name,k.desc,k.POIType,k.userCreated,k.floor-1,k.building);
+                                if(k.building.equals(jComboBoxRemoveFloorBuild.getSelectedItem())&&k.floor>jComboBoxRemoveFloorNum.getSelectedIndex()){
+                                    
+                                    changePOIData(k,tempPOI,newName.getAbsolutePath(),"",false);
+                                }
+                                changePOIData(k,tempPOI,POIPath+"favourites/favourites.txt","",false);
+                                    
+                        }
+                        
+                        
                         
                     }
-                    changeBuildPOIs();
+                    for(File j:userStuff){
+                            ArrayList<POI> temp = getPOIFromFile(j.getAbsolutePath());
+                            for(POI k:temp){
+                                if(k.building.equals(jComboBoxRemoveFloorBuild.getSelectedItem())){
+                                    if(k.floor>jComboBoxRemoveFloorNum.getSelectedIndex()){
+                                        POI tempPOI = new POI(k.locX,k.locY,k.name,k.desc,k.POIType,k.userCreated,k.floor-1,k.building);
+                                        changePOIData(k,tempPOI,j.getAbsolutePath(),"",false);
+                                    }
+                                    else if(k.floor==jComboBoxRemoveFloorNum.getSelectedIndex()){
+                                        POI tempPOI = new POI(k.locX,k.locY,k.name,k.desc,k.POIType,k.userCreated,k.floor-1,k.building);
+                                        changePOIData(k,tempPOI,j.getAbsolutePath(),"",true);
+                                    }
+                                  
+                                }
+                                    
+                            }
                    
+                    }
+                    
+                    
+                    
+                    zoomMul = 1;
+                    floorIndex-=1;
+                    if(floorIndex<0){
+                        floorIndex = 0;
+                    }
+                    changeBuildPOIs();
+                    searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                    reloadImages();
+                    loadFavouritesData();
+                    pOILayer1.Reset();
+                    pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+                    if(!admin){
+                          pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+                        }
+                    pOILayer1.repaint();
                 }
-            }
-            catch(Exception e){
+                catch(Exception e){
                 //
                 //System.out.println(e);
-            }
+                }
         }
     }//GEN-LAST:event_jMenuItemRemoveFloorActionPerformed
 
     private void jComboBoxRemoveFloorBuildItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxRemoveFloorBuildItemStateChanged
         // TODO add your handling code here:
+        setRemoveComboFloor();
+        
+    }//GEN-LAST:event_jComboBoxRemoveFloorBuildItemStateChanged
+    private void setRemoveComboFloor(){
         int floorNums = new File(buildingPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()).list().length;
         String[] itemBox = new String[floorNums];
         for(int i = 0;i<floorNums;i++){
             itemBox[i] = ""+i;
         }
         jComboBoxRemoveFloorNum.setModel(new DefaultComboBoxModel(itemBox));
-    }//GEN-LAST:event_jComboBoxRemoveFloorBuildItemStateChanged
-
+        
+    }
     private void pOILayer1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MousePressed
         // TODO add your handling code here:
         POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
         if(clickedPOI!=null){
             
             System.out.println("DSDS");
-            xDrag = evt.getX();
-            yDrag = evt.getY();
-            pOILayer1.moveingPOI(clickedPOI);
-            pOILayer1.dragX=xDrag;
-            pOILayer1.dragY=yDrag;
+            
+            draggedPOI = clickedPOI;
+            
         }
     }//GEN-LAST:event_pOILayer1MousePressed
 
     private void pOILayer1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseDragged
         // TODO add your handling code here:
+        
         System.out.println("DRAGGING MOUSE");
-        pOILayer1.dragX = evt.getX();
-        pOILayer1.dragY = evt.getY();
-        pOILayer1.repaint();
+        if(draggedPOI!=null){
+            resetSelect();
+            pOILayer1.moveingPOI(draggedPOI);
+            pOILayer1.setHigh(draggedPOI);
+            pOILayer1.dragX = evt.getX();
+            pOILayer1.dragY = evt.getY();
+            pOILayer1.repaint();
+        }
+        
     }//GEN-LAST:event_pOILayer1MouseDragged
 
     private void pOILayer1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseReleased
         // TODO add your handling code here:
-        if(xDrag!=null){
+        if(draggedPOI!=null&&pOILayer1.dragPOI!=null){
+            POI newPOI = null;
+            if(admin){
+                newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),draggedPOI.name,draggedPOI.desc,draggedPOI.POIType,false,draggedPOI.floor,draggedPOI.building);
+                changePOIData(draggedPOI,newPOI,POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt","",false);
+                changePOIData(draggedPOI,newPOI,POIPath+"favourites/favourites.txt","",false);
+                /*
+                
+                
+                
+                
+                
+                
+                
+                Fav code
+                */
+                
+            }
+            else{
+               newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),draggedPOI.name,draggedPOI.desc,draggedPOI.POIType,true,draggedPOI.floor,draggedPOI.building); 
+               changePOIData(draggedPOI,newPOI,POIPath+"users"+"/"+username+".txt","",false);
+            }
+            changeBuildPOIs();
+            //searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+            //searchBox.setSelectedItem(newPOI);
+            
+            
+            
+            
+            
+            
+            pOILayer1.smallReset();
+            pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+            if(!admin){
+              pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+            }
+            pOILayer1.repaint();
+            draggedPOI=null;
+        }
+        
+    }//GEN-LAST:event_pOILayer1MouseReleased
+    private void resetSelect(){
+        pOILayer1.setHigh(null);
+        jPanelPOIInfo.setVisible(false);
+        selectedPOI = null;
+        jLabelPOIName.setText("");
+        jLabelPOIDesc.setText("");
+        pOILayer1.repaint();
+                
+    }
+    private void pOILayer1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_pOILayer1FocusLost
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_pOILayer1FocusLost
+
+    private void searchBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBoxItemStateChanged
+        // TODO add your handling code here:
+        if(!editing){
+            searchCenter();
+        }
+        
+        
+    }//GEN-LAST:event_searchBoxItemStateChanged
+
+    private void jButtonEditPOIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonEditPOIMouseClicked
+        // TODO add your handling code here:
+        int result = jOptionPaneEdit.showConfirmDialog(null,jPanelEditPOI,"Remove Floor",JOptionPane.OK_CANCEL_OPTION);
+        editing = true;
+        if(result == JOptionPane.OK_OPTION){
+            if(jCheckBoxDeletePOI.isSelected()){
+                if(selectedPOI.userCreated){
+                   changePOIData(selectedPOI,selectedPOI,POIPath+"users/"+username+".txt","",true); 
+                }
+                else{
+                  removeFav(selectedPOI.toStringSave());
+                  changePOIData(selectedPOI,selectedPOI,POIPath+selectedPOI.building+"/"+selectedPOI.building+"-"+selectedPOI.floor+".txt","",true);
+                }
+                
+                loadFavouritesData();
+                changeBuildPOIs();
+                System.out.println(searchBox);
+                searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                
+                //searchBox.setSelectedIndex();
+                
+                reloadImages();
+                
+                
+                
+            }
+            else if(!jTextFieldEditPOIName.getText().equals("")){
+                POI newPOI = new POI(selectedPOI.locX,selectedPOI.locY,jTextFieldEditPOIName.getText(),jTextFieldEditPOIDesc.getText(),jComboBoxEditPOI.getSelectedIndex(),selectedPOI.userCreated,selectedPOI.floor,selectedPOI.building);
+                if(selectedPOI.userCreated){
+                    changePOIData(selectedPOI,newPOI,POIPath+"users/"+username+".txt","",false);
+                }
+                else{
+                    changePOIData(selectedPOI,newPOI,POIPath+newPOI.building+"/"+newPOI.building+"-"+newPOI.floor+".txt","",false);
+                    
+                }
+                changePOIData(selectedPOI,newPOI,POIPath+"favourites"+"/favourites.txt","",false);
+                loadFavouritesData();
+                changeBuildPOIs();
+                System.out.println(searchBox);
+                searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                System.out.println(buildAllPOIs.indexOf(newPOI));
+                //searchBox.setSelectedIndex();
+                
+                reloadImages();
+
+                
+            }
+        }
+        editing = false;
+        resetSelect();
+        pOILayer1.smallReset();
+        pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+        if(!admin){
+              pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+            }
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jButtonEditPOIMouseClicked
+
+    private void jCheckBoxDeletePOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDeletePOIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxDeletePOIActionPerformed
+
+    private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
+        // TODO add your handling code here:
+        jComboBoxFavSearch.setModel(new DefaultComboBoxModel(favPOIs.toArray()));
+        
+        int result = jOptionPaneEdit.showConfirmDialog(null,jPanelFavSearch,"Favourites",JOptionPane.OK_CANCEL_OPTION);
+        if(result == JOptionPane.OK_OPTION){
+            try{
+                if(jComboBoxFavSearch.getSelectedIndex()==-1){
+                    throw new Exception("No Favourite Selected");
+                }
+                else{
+                    POI selP = favPOIs.get(jComboBoxFavSearch.getSelectedIndex());
+                    
+                    resetSelect();
+                    buildingName = selP.building;
+                    zoomMul = 1;
+                    floorIndex=selP.floor;
+                    changeBuildPOIs();
+                    //searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                    reloadImages();
+
+                    pOILayer1.Reset();
+                    pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+                    if(!admin){
+                          pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+                        }
+                    pOILayer1.findAndSetHigh(selP);
+                    selectedPOI = pOILayer1.highPOI;
+                    upDatePOIInfoLabel();
+
+                    pOILayer1.repaint();
+                    toggleCorrect(selP);
+                    
+                    
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        
+        }
+    }//GEN-LAST:event_jMenu6MouseClicked
+    private void toggleCorrect(POI m){
+        if(m.POIType==POI.NAVIGATION){
+            jToggleButtonNav.setSelected(true);
+        }
+        else if(m.POIType==POI.CLASSROOMS){
+            jToggleButtonClass.setSelected(true);
+        }
+        else if(m.POIType==POI.RESTURANTS){
+            jToggleButtonRes.setSelected(true);
+        }
+        else if(m.POIType==POI.LABS){
+            jToggleButtonLab.setSelected(true);
+        }
+        else if(m.POIType==POI.CS){
+            jToggleButtonNav.setSelected(true);
+        }
+        else if(m.POIType==POI.AC){
+            jToggleButtonAC.setSelected(true);
+        }
+        else if(m.POIType==POI.WR){
+            jToggleButtonWR.setSelected(true);
+        }
+    }
+    private void jButtonFavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFavMouseClicked
+        // TODO add your handling code here:
+        if(jButtonFav.getText().equals("Favourite")){
+            saveFav(selectedPOI);
+        }
+        else{
+            removeFav(selectedPOI.toStringSave());
+        }
+        loadFavouritesData();
+        upDatePOIInfoLabel();
+        
+    
+    }//GEN-LAST:event_jButtonFavMouseClicked
+
+    private void jMenuItemRemoveBuildingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItemRemoveBuildingMouseClicked
+        // TODO add your handling code here:
+        
+        
+    }//GEN-LAST:event_jMenuItemRemoveBuildingMouseClicked
+
+    private void jMenuItemRemoveBuildingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRemoveBuildingActionPerformed
+            // TODO add your handling code here:
+            jComboBoxDeleteBuild.setModel(new DefaultComboBoxModel(buildingsAll.toArray()));
+        
+        int result = jOptionPaneEdit.showConfirmDialog(null,jPanelDeleteBuilding,"Remove Building",JOptionPane.OK_CANCEL_OPTION);
+        
+        if(result == JOptionPane.OK_OPTION){
+            try{
+                if(jComboBoxDeleteBuild.getSelectedIndex()==-1){
+                    throw new Exception("No buildings to delete");
+                }
+                else{
+                    File[] userStuff = new File(POIPath+"users").listFiles();
+                    for(File j:userStuff){
+                        deleteFloorBuildingPOI(jComboBoxDeleteBuild.getSelectedItem().toString(),".*",j.getAbsolutePath());
+                    }
+                    
+                    deleteFloorBuildingPOI(jComboBoxDeleteBuild.getSelectedItem().toString(),".*",POIPath+"favourites/favourites.txt");
+                    FileUtils.deleteDirectory(new File("src/main/resources/images/Floors/"+jComboBoxDeleteBuild.getSelectedItem()));
+                    FileUtils.deleteDirectory(new File("src/main/resources/POI info/"+jComboBoxDeleteBuild.getSelectedItem()));
+                    deleteBuilding(jComboBoxDeleteBuild.getSelectedItem().toString());
+                    buildingsAll = getItemsFromFile("src/main/resources/Building info/buildings.txt");
+                    int oldsel = jList1.getSelectedIndex();
+                    jList1.setModel(new DefaultComboBoxModel(buildingsAll.toArray()));
+                    oldsel-=1;
+                    if(oldsel<0){
+                        oldsel=0;
+                    }
+                    jList1.setSelectedIndex(oldsel);
+                    buildingName = buildingsAll.get(oldsel);
+                    resetSelect();
+                    
+                    zoomMul = 1;
+                    floorIndex=0;
+                    changeBuildPOIs();
+                    //searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
+                    reloadImages();
+
+                    pOILayer1.Reset();
+                    pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt",floorIndex);
+                    if(!admin){
+                          pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
+                        }
+                    
+                    pOILayer1.repaint();
+                    
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            
             
         }
-    }//GEN-LAST:event_pOILayer1MouseReleased
+    }//GEN-LAST:event_jMenuItemRemoveBuildingActionPerformed
 
+    private void jMenuItemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogoutActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jMenuItemLogoutActionPerformed
+
+    private void jToggleButtonNavItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonNavItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayNav = jToggleButtonNav.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonNavItemStateChanged
+
+    private void jToggleButtonClassItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonClassItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayClass = jToggleButtonClass.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonClassItemStateChanged
+
+    private void jToggleButtonResItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonResItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayRes = jToggleButtonRes.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonResItemStateChanged
+
+    private void jToggleButtonLabItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonLabItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayLabs = jToggleButtonLab.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonLabItemStateChanged
+
+    private void jToggleButtonCSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonCSItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayCS = jToggleButtonCS.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonCSItemStateChanged
+
+    private void jToggleButtonACItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonACItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayAC = jToggleButtonAC.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonACItemStateChanged
+
+    private void jToggleButtonWRItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonWRItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayWR = jToggleButtonWR.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonWRItemStateChanged
+
+    private void BoxPOIAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxPOIAddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoxPOIAddActionPerformed
+    private void saveFav(POI poiSave){
+        try{
+            
+            FileWriter POIFile = new FileWriter(POIPath+"favourites/favourites.txt",true);
+            BufferedWriter POIwrite = new BufferedWriter(POIFile);
+            
+                System.out.println(poiSave.toStringSave());
+                POIwrite.write(poiSave.toStringSave()+","+username);
+                POIwrite.newLine();
+                System.out.println("DSDSDSDPPPNAMISAMSOIMSAOISM");
+            
+
+            POIwrite.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
     /**
      * @param args the command line arguments
      */
+    private void changePOIData(POI oldPOI,POI newPOI,String filePath,String mod,boolean delete){
+        Path path = Paths.get(filePath);
+        Charset charset = StandardCharsets.UTF_8;
+        System.out.println(filePath);
+        try{
+            String content = new String(Files.readAllBytes(path), charset);
+            System.out.println(oldPOI.toStringSave()+mod+":old");
+            System.out.println(newPOI.toStringSave()+mod+":new");
+            if(delete){
+                content = content.replaceAll(oldPOI.toStringSave()+mod, "");
+            }
+            else{
+                content = content.replaceAll(oldPOI.toStringSave()+mod, newPOI.toStringSave()+mod);
+            }
+            
+            Files.write(path, content.getBytes(charset));
+        }
+        catch(Exception e){
+            System.out.println(e+" ChangePOI");
+            
+        }
+        
+    }
+    private void deleteFloorBuildingPOI(String building,String floor,String filePath){
+        Path path = Paths.get(filePath);
+        Charset charset = StandardCharsets.UTF_8;
+        
+        try{
+            String content = new String(Files.readAllBytes(path), charset);
+            
+                
+                String reg = ".*,.*,.*,.*,.*,.*,"+floor+","+building+".*";
+                content = content.replaceAll(reg,"");
+            
+            
+            Files.write(path, content.getBytes(charset));
+        }
+        catch(Exception e){
+            System.out.println(e+" ChangePOI");
+            
+        }
+        
+        
+    }
+    private void removeFav(String poi){
+        Path path = Paths.get(POIPath+"favourites/favourites.txt");
+        Charset charset = StandardCharsets.UTF_8;
+        
+        try{
+            String content = new String(Files.readAllBytes(path), charset);
+            
+                
+                String reg = poi+",.*";
+                content = content.replaceAll(reg,"");
+            
+            
+            Files.write(path, content.getBytes(charset));
+        }
+        catch(Exception e){
+            System.out.println(e+" ChangePOI");
+            
+        }
+        
+        
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -1418,25 +2145,22 @@ public class AppWindow extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> BoxPOIAdd;
-    private javax.swing.JButton jButtonAccessibility;
     private javax.swing.JButton jButtonAddBuilding;
     private javax.swing.JButton jButtonAddFloor;
-    private javax.swing.JButton jButtonCSPOIs;
-    private javax.swing.JButton jButtonClassrooms;
     private javax.swing.JButton jButtonDownFloor;
-    private javax.swing.JButton jButtonLabs;
+    private javax.swing.JButton jButtonEditPOI;
+    private javax.swing.JButton jButtonFav;
     private javax.swing.JButton jButtonLayers;
-    private javax.swing.JButton jButtonLegend;
-    private javax.swing.JButton jButtonNavigation;
-    private javax.swing.JButton jButtonRestaurants;
     private javax.swing.JButton jButtonUpFloor;
-    private javax.swing.JButton jButtonUserPOIs;
-    private javax.swing.JButton jButtonWashrooms;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxFav;
+    private javax.swing.JCheckBox jCheckBoxDeletePOI;
     private javax.swing.JComboBox<String> jComboBoxAddFloor;
+    private javax.swing.JComboBox<String> jComboBoxDeleteBuild;
+    private javax.swing.JComboBox<String> jComboBoxEditPOI;
+    private javax.swing.JComboBox<String> jComboBoxFavSearch;
     private javax.swing.JComboBox<String> jComboBoxRemoveFloorBuild;
     private javax.swing.JComboBox<String> jComboBoxRemoveFloorNum;
     private javax.swing.JDialog jDialogError;
@@ -1444,11 +2168,19 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelAC;
     private javax.swing.JLabel jLabelAddBuildingName;
     private javax.swing.JLabel jLabelAddFloor;
+    private javax.swing.JLabel jLabelEditPOI;
+    private javax.swing.JLabel jLabelFloor;
     private javax.swing.JLabel jLabelPOIAddDesc;
     private javax.swing.JLabel jLabelPOIAddName;
+    private javax.swing.JLabel jLabelPOIDesc;
+    private javax.swing.JLabel jLabelPOIName;
+    private javax.swing.JLabel jLabelSearchFav;
     private javax.swing.JLabel jLabelWC;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
@@ -1459,8 +2191,10 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemAddBuilding;
     private javax.swing.JMenuItem jMenuItemAddFloor;
+    private javax.swing.JMenuItem jMenuItemLogout;
     private javax.swing.JMenuItem jMenuItemRemoveBuilding;
     private javax.swing.JMenuItem jMenuItemRemoveFloor;
+    private javax.swing.JMenu jMenuLogout;
     private javax.swing.JOptionPane jOptionPaneEdit;
     private javax.swing.JOptionPane jOptionPanePOIOption;
     private javax.swing.JPanel jPanel1;
@@ -1470,6 +2204,9 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelAddBuilding;
     private javax.swing.JPanel jPanelAddFloor;
     private javax.swing.JPanel jPanelAddPOI;
+    private javax.swing.JPanel jPanelDeleteBuilding;
+    private javax.swing.JPanel jPanelEditPOI;
+    private javax.swing.JPanel jPanelFavSearch;
     private javax.swing.JPanel jPanelLayerButtons;
     private javax.swing.JPanel jPanelPOIInfo;
     private javax.swing.JPanel jPanelRemoveFloor;
@@ -1478,8 +2215,17 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldAddBuilding;
     private javax.swing.JTextField jTextFieldAddBuildingPath;
     private javax.swing.JTextField jTextFieldAddFloorPath;
+    private javax.swing.JTextField jTextFieldEditPOIDesc;
+    private javax.swing.JTextField jTextFieldEditPOIName;
     private javax.swing.JTextField jTextFieldPOIAddDesc;
     private javax.swing.JTextField jTextFieldPOIAddName;
+    private javax.swing.JToggleButton jToggleButtonAC;
+    private javax.swing.JToggleButton jToggleButtonCS;
+    private javax.swing.JToggleButton jToggleButtonClass;
+    private javax.swing.JToggleButton jToggleButtonLab;
+    private javax.swing.JToggleButton jToggleButtonNav;
+    private javax.swing.JToggleButton jToggleButtonRes;
+    private javax.swing.JToggleButton jToggleButtonWR;
     private javax.swing.JLabel mapImage;
     private javax.swing.JScrollPane mapImageScrollPane;
     private javax.swing.JPanel mapPanel;

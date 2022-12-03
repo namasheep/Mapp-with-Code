@@ -28,12 +28,16 @@ public class POILayer extends JPanel {
     ArrayList<POI> resPOIs = new ArrayList<POI>();
     ArrayList<POI> labsPOIs = new ArrayList<POI>();
     ArrayList<POI> csPOIs = new ArrayList<POI>();
+    ArrayList<POI> ACPOIs = new ArrayList<POI>();
+    ArrayList<POI> WRPOIs = new ArrayList<POI>();
     boolean displayUser = true;
     boolean displayNav = true;
     boolean displayClass = true;
     boolean displayRes = true;
     boolean displayLabs = true;
     boolean displayCS = true;
+    boolean displayAC = true;
+    boolean displayWR = true;
     double sizeMul = 1;
     Image highIm;
     POI highPOI=null;
@@ -134,6 +138,38 @@ public class POILayer extends JPanel {
             
             }
         }
+        if(displayAC){
+            for(POI i:ACPOIs){
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
+                }
+                
+            
+            }
+        }
+        if(displayWR){
+            for(POI i:WRPOIs){
+                if(((i.userCreated&&displayUser)||!i.userCreated)&&!i.dragging){
+                    if(i.highlighted){
+                        System.out.println("fdfdfd");
+                        g.drawImage(highIm, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);
+                    }
+                    else{
+                      g.drawImage(i.imIcon, (int)(i.locX*sizeMul-16), (int)(i.locY*sizeMul-32), this);  
+                    }
+                }
+                
+            
+            }
+        }
+        
+        
         if(dragPOI!=null){
             paintDrag(g);
         }
@@ -147,11 +183,60 @@ public class POILayer extends JPanel {
     public void setSizeMul(double mul){
         sizeMul=mul;
     }
+    public void findAndSetHigh(POI m){
+        /*
+        ArrayList<POI> navPOIs = new ArrayList<POI>();
+    ArrayList<POI> classPOIs = new ArrayList<POI>();
+    ArrayList<POI> resPOIs = new ArrayList<POI>();
+    ArrayList<POI> labsPOIs = new ArrayList<POI>();
+    ArrayList<POI> csPOIs
+        */
+        for(POI i:navPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        for(POI i:classPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        for(POI i:resPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        for(POI i:labsPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        for(POI i:csPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        for(POI i:ACPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        for(POI i:WRPOIs){
+            if(i.equals(m)){
+                setHigh(i);
+            }
+        }
+        
+    }
+    
     public void setHigh(POI newHigh){
         if(highPOI!=null){
             highPOI.highlighted=false;
         }
-        newHigh.highlighted=true;
+        if(newHigh!=null){
+            newHigh.highlighted=true;
+        }
+        
         highPOI = newHigh;
     }
     public POI clickContain(int x,int y){
@@ -237,6 +322,38 @@ public class POILayer extends JPanel {
             }
             
         }
+        if(displayAC){
+            for(POI i:ACPOIs){
+                if(i.contains(x,y,sizeMul)&&((i.userCreated&&displayUser)||!i.userCreated)){
+
+                    if(dist==-1){
+                        ret=i; 
+                    }
+                    else{
+                        if(calcDist(i.locX*sizeMul,i.locY*sizeMul-16,x,y)<dist){
+                            ret = i;
+                        }
+                    }
+                }
+            }
+            
+        }
+        if(displayWR){
+            for(POI i:WRPOIs){
+                if(i.contains(x,y,sizeMul)&&((i.userCreated&&displayUser)||!i.userCreated)){
+
+                    if(dist==-1){
+                        ret=i; 
+                    }
+                    else{
+                        if(calcDist(i.locX*sizeMul,i.locY*sizeMul-16,x,y)<dist){
+                            ret = i;
+                        }
+                    }
+                }
+            }
+            
+        }
         
         return ret;
     }
@@ -260,6 +377,12 @@ public class POILayer extends JPanel {
         else if(newPOI.POIType==POI.CS){
             csPOIs.add(newPOI);
         }
+        else if(newPOI.POIType==POI.AC){
+            ACPOIs.add(newPOI);
+        }
+        else if(newPOI.POIType==POI.WR){
+            WRPOIs.add(newPOI);
+        }
         
     }
     public void Reset(){
@@ -272,15 +395,24 @@ public class POILayer extends JPanel {
         resPOIs.clear();
         labsPOIs.clear();
         csPOIs.clear();
+        ACPOIs.clear();
+        WRPOIs.clear();
         highPOI=null;
+        dragPOI=null;
         sizeMul = 1;
     }
-    public ArrayList<POI> getPOIs(int type){
-        if(type==POI.CLASSROOMS){
-            return classPOIs;
-        }
-        return navPOIs;
+    public void smallReset(){
+        classPOIs.clear();
+        navPOIs.clear();
+        resPOIs.clear();
+        labsPOIs.clear();
+        csPOIs.clear();
+        ACPOIs.clear();
+        WRPOIs.clear();
+        highPOI=null;
+        dragPOI=null;
     }
+
     /*public void setPOIs(ArrayList<POI> newList){
         myPOIs = newList;
     }*/
@@ -313,7 +445,10 @@ public class POILayer extends JPanel {
         if(dragPOI!=null){
             dragPOI.dragging=false;
         }
-        m.dragging = true;
+        if(m!=null){
+            m.dragging = true;
+        }
+        
         dragPOI = m;
     }
     

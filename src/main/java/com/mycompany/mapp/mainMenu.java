@@ -95,7 +95,7 @@ public class mainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_registerActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        login l1 = new login();
+        Mapp l1 = new Mapp();
         l1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_loginActionPerformed
