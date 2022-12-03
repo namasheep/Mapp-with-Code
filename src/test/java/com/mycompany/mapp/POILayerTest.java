@@ -5,6 +5,7 @@
 package com.mycompany.mapp;
 
 import java.awt.Graphics;
+import java.io.File;
 import javax.swing.JPanel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -98,11 +99,11 @@ public class POILayerTest {
     @Test
     public void testSetHigh() {
         System.out.println("setHigh");
-        POI newHigh = null;
+        
         POILayer instance = new POILayer();
-        instance.setHigh(newHigh);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.ACPOIs.add(testPOI);
+        instance.setHigh(testPOI);
+        assertTrue(instance.highPOI.equals(testPOI));
     }
 
     /**
@@ -111,14 +112,16 @@ public class POILayerTest {
     @Test
     public void testClickContain() {
         System.out.println("clickContain");
-        int x = 0;
-        int y = 0;
+        int x = 80;
+        int y = 75;
+        
         POILayer instance = new POILayer();
-        POI expResult = null;
-        POI result = instance.clickContain(x, y);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.ACPOIs.add(testPOI);
+        instance.sizeMul = 1;
+        POI expResult = testPOI;
+        POI result = instance.clickContain(x,y);
+        assertTrue(expResult.equals(result));
+        
     }
 
     /**
@@ -127,11 +130,13 @@ public class POILayerTest {
     @Test
     public void testAddPOI() {
         System.out.println("addPOI");
-        POI newPOI = null;
+        
+        
         POILayer instance = new POILayer();
-        instance.addPOI(newPOI);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        instance.addPOI(testPOI);
+        assertTrue(instance.navPOIs.contains(testPOI));
+        
     }
 
     /**
@@ -141,9 +146,11 @@ public class POILayerTest {
     public void testReset() {
         System.out.println("Reset");
         POILayer instance = new POILayer();
+        instance.addPOI(testPOI);
+        instance.highPOI = testPOI;
         instance.Reset();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        boolean resetWork = (instance.navPOIs.isEmpty()&&instance.classPOIs.isEmpty()&&instance.labsPOIs.isEmpty()&&instance.csPOIs.isEmpty()&&instance.resPOIs.isEmpty()&&instance.ACPOIs.isEmpty()&&instance.WRPOIs.isEmpty());
+        assertTrue(resetWork);
     }
 
     /**
@@ -153,9 +160,15 @@ public class POILayerTest {
     public void testSmallReset() {
         System.out.println("smallReset");
         POILayer instance = new POILayer();
+        instance.addPOI(testPOI);
+        instance.highPOI = testPOI;
+        double newMul = 88;
+        instance.sizeMul = newMul;
+        
         instance.smallReset();
+        boolean resetWork = (instance.navPOIs.isEmpty()&&instance.classPOIs.isEmpty()&&instance.labsPOIs.isEmpty()&&instance.csPOIs.isEmpty()&&instance.resPOIs.isEmpty()&&instance.ACPOIs.isEmpty()&&instance.WRPOIs.isEmpty());
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(resetWork);
     }
 
     /**
@@ -164,13 +177,13 @@ public class POILayerTest {
     @Test
     public void testAddApplicable() {
         System.out.println("addApplicable");
-        String filePath = "";
-        String building = "";
+        String filePath = "mockData.txt";
+        String building = "opfipsd";
         int floor = 0;
         POILayer instance = new POILayer();
         instance.addApplicable(filePath, building, floor);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(instance.navPOIs.isEmpty());
     }
 
     /**
@@ -183,7 +196,7 @@ public class POILayerTest {
         POILayer instance = new POILayer();
         instance.moveingPOI(m);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNull(instance.dragPOI);
     }
 
     /**
@@ -192,12 +205,15 @@ public class POILayerTest {
     @Test
     public void testSetPOIsFromFile() {
         System.out.println("setPOIsFromFile");
-        String filePath = "";
+        String filePath = "mockData.txt";
+        
+        
         int Floor = 0;
         POILayer instance = new POILayer();
+        
         instance.setPOIsFromFile(filePath, Floor);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(instance.navPOIs.isEmpty());
     }
     
 }

@@ -1,5 +1,0 @@
-978,358,newUser,pp,0,true,0,MC
-869,611,newUserUp,pp,4,true,1,MC
-436,192,yy,pop,0,true,0,STAB
-554,230,yy,pop,0,true,0,MC
-711,158,mm,pp,0,true,0,STAB

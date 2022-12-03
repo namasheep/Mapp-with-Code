@@ -1,0 +1,6 @@
+904,563,Washroom 109,Unisex,6,false,1,STADIUM
+795,631,ELEV A,,5,false,1,STADIUM
+801,629,ELEV A,,0,false,1,STADIUM
+918,565,Washroom 109,,5,false,1,STADIUM
+768,659,ST 2 FL 2,,0,false,1,STADIUM
+501,679,ST 1 FL 2,,0,false,1,STADIUM

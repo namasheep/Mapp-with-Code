@@ -1,0 +1,12 @@
+314,354,Washroom 28,women,5,false,0,STADIUM
+341,371,Washroom 28,women,6,false,0,STADIUM
+937,374,Washroom 40,women,6,false,0,STADIUM
+886,372,Washroom 40,women,5,false,0,STADIUM
+301,471,Washroom 55,Men,5,false,0,STADIUM
+324,498,Washroom 55,Men,6,false,0,STADIUM
+460,582,TA 6,,5,false,0,STADIUM
+402,627,EX 4,,5,false,0,STADIUM
+796,626,ELEV A,,5,false,0,STADIUM
+806,631,ELEV A,,0,false,0,STADIUM
+779,690,ST 2 FL 0,,0,false,0,STADIUM
+498,646,ST 1 FL 0,,0,false,0,STADIUM

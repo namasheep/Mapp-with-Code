@@ -1,0 +1,4 @@
+1016,518,Stair 3 FL 4,,0,false,4,MC
+1496,749,Stair 5 FL 4,,0,false,4,MC
+1334,651,ELEV C,,0,false,4,MC
+1342,659,ELEV C,,5,false,4,MC

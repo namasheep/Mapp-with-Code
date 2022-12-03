@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="10" failures="8" name="com.mycompany.mapp.POILayerTest" time="0.258" errors="0" skipped="0">
+<testsuite tests="10" failures="0" name="com.mycompany.mapp.POILayerTest" time="0.238" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="16.0.1+9-24"/>
@@ -60,77 +60,14 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetSizeMul" time="0.227"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testFindAndSetHigh" time="0.001"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetHigh" time="0.008">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testSetHigh(POILayerTest.java:105)
-</failure>
-    <system-out>setHigh
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testAddApplicable" time="0.003">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testAddApplicable(POILayerTest.java:173)
-</failure>
-    <system-out>addApplicable
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testClickContain" time="0.003">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testClickContain(POILayerTest.java:121)
-</failure>
-    <system-out>clickContain
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSmallReset" time="0.004">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testSmallReset(POILayerTest.java:158)
-</failure>
-    <system-out>smallReset
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testMoveingPOI" time="0.003">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testMoveingPOI(POILayerTest.java:186)
-</failure>
-    <system-out>moveingPOI
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testReset" time="0.003">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testReset(POILayerTest.java:146)
-</failure>
-    <system-out>Reset
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testAddPOI" time="0.003">
-    <failure message="Cannot read field &quot;POIType&quot; because &quot;newPOI&quot; is null" type="java.lang.NullPointerException">java.lang.NullPointerException: Cannot read field &quot;POIType&quot; because &quot;newPOI&quot; is null
-	at com.mycompany.mapp.POILayer.addPOI(POILayer.java:364)
-	at com.mycompany.mapp.POILayerTest.testAddPOI(POILayerTest.java:132)
-</failure>
-    <system-out>addPOI
-</system-out>
-  </testcase>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetPOIsFromFile" time="0.003">
-    <failure message="The test case is a prototype." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: The test case is a prototype.
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:39)
-	at org.junit.jupiter.api.Assertions.fail(Assertions.java:109)
-	at com.mycompany.mapp.POILayerTest.testSetPOIsFromFile(POILayerTest.java:200)
-</failure>
-    <system-out>setPOIsFromFile
-</system-out>
-  </testcase>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetSizeMul" time="0.209"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testReset" time="0.001"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testAddPOI" time="0.004"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testClickContain" time="0.004"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSmallReset" time="0.004"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetHigh" time="0.002"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testAddApplicable" time="0.003"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testFindAndSetHigh" time="0.003"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testMoveingPOI" time="0.005"/>
+  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetPOIsFromFile" time="0.003"/>
 </testsuite>

@@ -1,0 +1,15 @@
+137,722,Stairs 1 FL 3,,0,false,3,MC
+387,672,Stairs 2 FL 3,,0,false,3,MC
+304,722,Collab Room 325,Computer science lounge,1,false,3,MC
+457,634,Classroom 320,,1,false,3,MC
+557,583,Classroom 316,,1,false,3,MC
+866,557,Classroom 300,,1,false,3,MC
+708,510,Washroom 311,Men,6,false,3,MC
+942,461,ELEV A,,0,false,3,MC
+960,467,ELEV A,,5,false,3,MC
+1017,521,Stair 3 FL 3,,0,false,3,MC
+642,373,Lab 342,,3,false,3,MC
+1329,643,ELEV C,,0,false,3,MC
+1335,655,ELEV C,,5,false,3,MC
+1074,528,Washroom 388,womens,6,false,3,MC
+1508,745,Stair 5 FL 3,,0,false,3,MC

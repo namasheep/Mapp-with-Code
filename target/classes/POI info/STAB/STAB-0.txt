@@ -1,3 +1,13 @@
-234,602,jTextField1,jTextField2,0,false,0,STAB
-904,824,Stairs 2,stairs,0,false,0,STAB
-1152,1779,Stairs 3,stairs,0,false,0,STAB
+236,598,ST 1 FL 0,,0,false,0,STAB
+1148,1772,ST 3 FL 0,,0,false,0,STAB
+1020,884,ST 2 FL 0,,0,false,0,STAB
+860,976,ELEV A,,0,false,0,STAB
+854,990,ELEV A,,5,false,0,STAB
+804,900,EX 1,,5,false,0,STAB
+1072,916,TA 103,,5,false,0,STAB
+1110,780,TA 103,,5,false,0,STAB
+1152,800,TA 103,,5,false,0,STAB
+1252,828,Washroom 105,Men,5,false,0,STAB
+1316,828,Washroom 105,Men,6,false,0,STAB
+1264,916,Washroom 107,Women,6,false,0,STAB
+1314,918,Washroom 107,Women,5,false,0,STAB

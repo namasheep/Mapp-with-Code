@@ -53,7 +53,40 @@ public class POI {
         POIType = type;
         this.userCreated = userCreated;
         try{
-            File myIcon = new File("src/main/resources/images/icons/pin.png");
+            String fpath = "src/main/resources/images/icons/pin.png";
+            switch(type){
+                case(0):
+                    fpath = "src/main/resources/images/icons/pinNavigation.png";
+                    
+                break;
+                case(1):
+                    fpath = "src/main/resources/images/icons/pinClassroom.png";
+                    
+                break;
+                case(2):
+                    fpath = "src/main/resources/images/icons/pinRestaurant.png";
+                    
+                break;
+                case(3):
+                    fpath = "src/main/resources/images/icons/pinLab.png";
+                    
+                break;
+                case(4):
+                    fpath = "src/main/resources/images/icons/pinCSPOI.png";
+                    
+                break;
+                case(5):
+                    fpath = "src/main/resources/images/icons/pinAccessibility.png";
+                    
+                break;
+                case(6):
+                    fpath = "src/main/resources/images/icons/pinWashroom.png";
+                    
+                break;
+                
+            }
+            
+            File myIcon = new File(fpath);
             imIcon = (ImageIO.read(myIcon));
         }
         catch(IOException imgloss){

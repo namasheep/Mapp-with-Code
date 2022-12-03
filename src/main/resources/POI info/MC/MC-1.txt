@@ -1,0 +1,13 @@
+210,614,Classroom 105,,1,false,1,MC
+156,714,ST 1 FL 1,,0,false,1,MC
+377,664,ST 2 FL 1,,0,false,1,MC
+865,335,Classroom 110,,1,false,1,MC
+1306,687,EX 10,,5,false,1,MC
+943,465,ELEV A,,5,false,1,MC
+959,466,ELEV A,,0,false,1,MC
+1328,645,ELEV C,,0,false,1,MC
+1336,654,ELEV C,,5,false,1,MC
+1025,511,ST 3 FL 2,,0,false,1,MC
+710,514,Washroom 100,Mens,6,false,1,MC
+1374,689,Washroom 139,Womens,6,false,1,MC
+1502,744,Stairs 5,,0,false,1,MC

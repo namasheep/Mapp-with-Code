@@ -1,7 +1,4 @@
 MC
 STAB
 STADIUM
-testB
 
-
-opfipsd

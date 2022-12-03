@@ -1,1 +1,5 @@
-1129,1773,Stairs 3 FL 2,stairs,0,false,1,STAB
+245,583,ST 1 FL 1,,0,false,1,STAB
+1018,870,ST 2 FL 1,,0,false,1,STAB
+1131,1778,ST 3 FL 1,,0,false,1,STAB
+847,972,ELEV A,,0,false,1,STAB
+868,978,ELEV A,,5,false,1,STAB

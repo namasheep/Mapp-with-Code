@@ -1,6 +1,17 @@
-
-460,480,nam,ddd,0,false,0,MC
-577,415,nam,ddd,0,false,0,MC
-643,374,nam,ddd,0,false,0,MC
-383,520,nam,ddd,0,false,0,MC
-829,374,nam,ddd,0,false,0,MC
+825,329,Grad Club,Campus Eatery,2,false,0,MC
+461,481,Classroom 17,class,1,false,0,MC
+708,501,Washroom 5B,Men,6,false,0,MC
+730,466,Washroom 4C,Unisex,6,false,0,MC
+759,503,Washroom 4B,Women,6,false,0,MC
+716,457,Washroom 4B,Unisex,5,false,0,MC
+719,241,EX 6,exit back,5,false,0,MC
+958,464,EL A,,5,false,0,MC
+939,465,EL A,,0,false,0,MC
+1015,501,ST 3 FL 0,,0,false,0,MC
+1372,692,Washroom 28E,Mens,6,false,0,MC
+1334,652,ELEV C,,0,false,0,MC
+1501,738,ST 5 FL 0,up,0,false,0,MC
+368,658,ST 2 FL 0,up,0,false,0,MC
+234,706,TA 2 FL 0,,0,false,0,MC
+152,722,ST 1 FL 0,,0,false,0,MC
+633,537,Class 6,,4,false,0,MC

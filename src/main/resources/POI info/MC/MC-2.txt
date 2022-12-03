@@ -1,0 +1,17 @@
+155,608,Lab 230,,3,false,2,MC
+231,570,Lab 235,,3,false,2,MC
+459,482,Lab 240,,3,false,2,MC
+149,725,ST 1 FL 2,,0,false,2,MC
+380,674,ST 2 FL 2,,0,false,2,MC
+325,685,Collab Room 220,,1,false,2,MC
+335,578,Collab Room 239,,1,false,2,MC
+710,510,Washroom 205,womens,6,false,2,MC
+873,418,Classroom 204,,1,false,2,MC
+944,460,ELEV A,,0,false,2,MC
+958,466,ELEV A,,5,false,2,MC
+1021,521,Stair 3 FL 2,,0,false,2,MC
+1330,651,ELEV C,,0,false,2,MC
+1340,654,ELEV C,,5,false,2,MC
+1364,686,Washroom 278,,5,false,2,MC
+1377,693,Washroom 278,unisex,6,false,2,MC
+1506,746,Stairs 5 FL 2,,0,false,2,MC
