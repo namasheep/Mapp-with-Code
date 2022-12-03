@@ -1721,7 +1721,7 @@ public class AppWindow extends javax.swing.JFrame {
 
     private void pOILayer1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseReleased
         // TODO add your handling code here:
-        if(draggedPOI!=null&&pOILayer1.dragPOI!=null){
+        if(draggedPOI!=null&&pOILayer1.dragPOI!=null&&evt.getX()<mapImage.getIcon().getIconWidth()-16&&evt.getY()<mapImage.getIcon().getIconHeight()){
             POI newPOI = null;
             if(admin){
                 newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),draggedPOI.name,draggedPOI.desc,draggedPOI.POIType,false,draggedPOI.floor,draggedPOI.building);
