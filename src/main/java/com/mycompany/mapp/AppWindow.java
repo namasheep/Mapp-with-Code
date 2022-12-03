@@ -274,6 +274,7 @@ public class AppWindow extends javax.swing.JFrame {
         jToggleButtonCS = new javax.swing.JToggleButton();
         jToggleButtonAC = new javax.swing.JToggleButton();
         jToggleButtonWR = new javax.swing.JToggleButton();
+        jToggleButtonUserPOI = new javax.swing.JToggleButton();
         jButtonLayers = new javax.swing.JButton();
         jPanelUpDown = new javax.swing.JPanel();
         jButtonUpFloor = new javax.swing.JButton();
@@ -694,6 +695,15 @@ public class AppWindow extends javax.swing.JFrame {
             }
         });
         jPanelLayerButtons.add(jToggleButtonWR);
+
+        jToggleButtonUserPOI.setSelected(true);
+        jToggleButtonUserPOI.setText("User-POI");
+        jToggleButtonUserPOI.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jToggleButtonUserPOIItemStateChanged(evt);
+            }
+        });
+        jPanelLayerButtons.add(jToggleButtonUserPOI);
 
         jButtonLayers.setText("Layers");
         jButtonLayers.addActionListener(new java.awt.event.ActionListener() {
@@ -1174,7 +1184,8 @@ public class AppWindow extends javax.swing.JFrame {
     private void pOILayer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseClicked
         // TODO add your handling code here:
         POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
-        if(clickedPOI==null){
+        System.out.println();
+        if(clickedPOI==null&&evt.getX()<mapImage.getIcon().getIconWidth()-16&&evt.getY()<mapImage.getIcon().getIconHeight()){
             resetSelect();
             
             int result = jOptionPanePOIOption.showConfirmDialog(null, jPanelAddPOI, 
@@ -1900,6 +1911,9 @@ public class AppWindow extends javax.swing.JFrame {
         else if(m.POIType==POI.WR){
             jToggleButtonWR.setSelected(true);
         }
+        if(m.userCreated){
+            jToggleButtonUserPOI.setSelected(true);
+        }
     }
     private void jButtonFavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonFavMouseClicked
         // TODO add your handling code here:
@@ -2027,6 +2041,12 @@ public class AppWindow extends javax.swing.JFrame {
     private void BoxPOIAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxPOIAddActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BoxPOIAddActionPerformed
+
+    private void jToggleButtonUserPOIItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButtonUserPOIItemStateChanged
+        // TODO add your handling code here:
+        pOILayer1.displayUser = jToggleButtonUserPOI.isSelected();
+        pOILayer1.repaint();
+    }//GEN-LAST:event_jToggleButtonUserPOIItemStateChanged
     private void saveFav(POI poiSave){
         try{
             
@@ -2225,6 +2245,7 @@ public class AppWindow extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButtonLab;
     private javax.swing.JToggleButton jToggleButtonNav;
     private javax.swing.JToggleButton jToggleButtonRes;
+    private javax.swing.JToggleButton jToggleButtonUserPOI;
     private javax.swing.JToggleButton jToggleButtonWR;
     private javax.swing.JLabel mapImage;
     private javax.swing.JScrollPane mapImageScrollPane;
