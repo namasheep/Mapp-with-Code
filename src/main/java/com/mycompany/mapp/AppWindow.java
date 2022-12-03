@@ -774,6 +774,8 @@ public class AppWindow extends javax.swing.JFrame {
             }
         });
 
+        jPanelPOIInfo.setVisible(false);
+
         jButtonEditPOI.setText("Edit");
         jButtonEditPOI.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1035,7 +1037,7 @@ public class AppWindow extends javax.swing.JFrame {
         mapPanel.setLayout(mapPanelLayout);
         mapPanelLayout.setHorizontalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1297, Short.MAX_VALUE)
+            .addComponent(mapImageScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1392, Short.MAX_VALUE)
         );
         mapPanelLayout.setVerticalGroup(
             mapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2173,7 +2175,7 @@ public class AppWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AppWindow(false,"namashi").setVisible(true);
+                new AppWindow(true,"namashi").setVisible(true);
             }
         });
     }

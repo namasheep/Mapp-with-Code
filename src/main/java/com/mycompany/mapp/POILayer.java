@@ -47,7 +47,7 @@ public class POILayer extends JPanel {
     public POILayer(){
         super();
         try{
-            highIm=ImageIO.read(new File("src\\main\\resources\\images\\icons/pinHigh.png"));
+            highIm=ImageIO.read(new File("src/main/resources/images/icons/pinHigh.png"));
         }
         catch(Exception e){
             

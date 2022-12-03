@@ -1,1 +1,6 @@
 
+460,480,nam,ddd,0,false,0,MC
+577,415,nam,ddd,0,false,0,MC
+643,374,nam,ddd,0,false,0,MC
+383,520,nam,ddd,0,false,0,MC
+829,374,nam,ddd,0,false,0,MC
