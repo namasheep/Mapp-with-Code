@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="10" failures="0" name="com.mycompany.mapp.POILayerTest" time="0.101" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="com.mycompany.mapp.POITest" time="0.007" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="java.vm.version" value="16.0.1+9-24"/>
@@ -59,14 +59,9 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testAddApplicable" time="0.084"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testClickContain" time="0.001"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetHigh" time="0.001"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testFindAndSetHigh" time="0.002"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testAddPOI" time="0.002"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testReset" time="0.001"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSmallReset" time="0.001"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetSizeMul" time="0.007"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testMoveingPOI" time="0.002"/>
-  <testcase classname="com.mycompany.mapp.POILayerTest" name="com.mycompany.mapp.POILayerTest.testSetPOIsFromFile" time="0"/>
+  <testcase classname="com.mycompany.mapp.POITest" name="com.mycompany.mapp.POITest.testContainsF" time="0"/>
+  <testcase classname="com.mycompany.mapp.POITest" name="com.mycompany.mapp.POITest.testToStringSave" time="0.004"/>
+  <testcase classname="com.mycompany.mapp.POITest" name="com.mycompany.mapp.POITest.testEquals" time="0.002"/>
+  <testcase classname="com.mycompany.mapp.POITest" name="com.mycompany.mapp.POITest.testContainsP" time="0.001"/>
+  <testcase classname="com.mycompany.mapp.POITest" name="com.mycompany.mapp.POITest.testToString" time="0"/>
 </testsuite>

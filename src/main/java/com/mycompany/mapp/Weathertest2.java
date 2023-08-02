@@ -9,13 +9,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
+/**
+ * handles retrieving weather data
+ * @author Group 7
+ */
 public class Weathertest2 {
     String url = "https://api.openweathermap.org/data/2.5/weather?lat=42.9849&lon=-81.2453&units=metric&appid=7ddfa4963a43424d2db5759da1dcd8dd";
         
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
         HttpClient client = HttpClient.newBuilder().build();
         String temperature;
+        
+    /**
+     * 
+     */
     public Weathertest2(){
         temperature = "unavailable";
         try{
@@ -33,6 +40,11 @@ public class Weathertest2 {
     
     // takes in JSON object
     // not sure what it will return if temp not found
+    /**
+     * returns temperature
+     * @param obj stringified JSON resp
+     * @return temperature
+     */
     static private int GetTemp(JSONObject obj)
     {
         int temp = obj.getJSONObject("main").getInt("temp");
@@ -40,6 +52,11 @@ public class Weathertest2 {
     }
     
     // may return empty string if there is a random error
+    /**
+     *  gets weather conditions
+     * @param obj - stringified JSON resp
+     * @return 
+     */
     static private String GetWeather(JSONObject obj)
     {
         JSONArray arr = obj.getJSONArray("weather");

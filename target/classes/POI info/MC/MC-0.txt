@@ -1,10 +1,10 @@
-825,329,Grad Club,Campus Eatery,2,false,0,MC
+825,329,Grad Club,campus eatery,2,false,0,MC
 461,481,Classroom 17,class,1,false,0,MC
 708,501,Washroom 5B,Men,6,false,0,MC
 730,466,Washroom 4C,Unisex,6,false,0,MC
-759,503,Washroom 4B,Women,6,false,0,MC
+766,506,ST 3 FL 0,,0,false,0,MC
 716,457,Washroom 4B,Unisex,5,false,0,MC
-719,241,EX 6,exit back,5,false,0,MC
+719,241,EX 6,,5,false,0,MC
 958,464,EL A,,5,false,0,MC
 939,465,EL A,,0,false,0,MC
 1015,501,ST 3 FL 0,,0,false,0,MC

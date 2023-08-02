@@ -13,7 +13,7 @@ import java.util.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import com.mycompany.mapp.navBar;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,12 +27,13 @@ import org.apache.commons.io.FileUtils;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+
+
 /**
- *
- * @author DELL
+ * Appwindow GUI that handles Map application and file manipulation
+ * 
+ * @author Group 7
  */
-
-
 public class AppWindow extends javax.swing.JFrame {
     boolean admin = true;
     boolean navBarON = false;
@@ -61,6 +62,9 @@ public class AppWindow extends javax.swing.JFrame {
     
     /**
      * Creates new form AppWindow
+     * @param admin - whether user is admin or not
+     * @param username - username for user
+     * @
      */
     public AppWindow(boolean admin,String username) {
         this.admin = admin;
@@ -88,6 +92,11 @@ public class AppWindow extends javax.swing.JFrame {
         
 
     }
+    /**
+     * checks fvaourites for passed in POI
+     * @param temp
+     * @return whether temp is in favourites
+     */
     private boolean favouriteIncludes(POI temp){
         for(POI m:favPOIs){
             if(m.equals(temp)){
@@ -96,6 +105,9 @@ public class AppWindow extends javax.swing.JFrame {
         }
         return false;
     }
+    /**
+     * loads in favourites data from file
+     */
     private void loadFavouritesData(){
         favPOIs.clear();
         try{
@@ -124,6 +136,11 @@ public class AppWindow extends javax.swing.JFrame {
         }
         
     }
+    /**
+     * loads List of POIs from file
+     * @param filePath - path of metafile
+     * @return ArrayList of POI from metafile
+     */
     private ArrayList<POI> getPOIFromFile(String filePath){
         ArrayList<POI> m = new ArrayList<POI>();
         try{
@@ -148,6 +165,9 @@ public class AppWindow extends javax.swing.JFrame {
         }
         return m;
     }
+    /**
+     * reloads the POIs for the current building from meta data
+     */
     private void changeBuildPOIs(){
         buildAllPOIs.clear();
         
@@ -158,7 +178,7 @@ public class AppWindow extends javax.swing.JFrame {
                 String line = null;
                 while((line = reader.readLine()) != null){
                 if(!line.trim().isEmpty()){
-                    System.out.println(line);
+                    
                     String[] POIComp = line.split(",");
                     POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]),i,POIComp[7]);
                     buildAllPOIs.add(newPOI);
@@ -170,14 +190,14 @@ public class AppWindow extends javax.swing.JFrame {
               }
                            
           }
-          if(!admin){
+          if(!admin){//gets user POIS as well if not an admin
               ArrayList<POI> userP = new ArrayList<POI>();
               try{
                   BufferedReader reader = new BufferedReader(new FileReader(POIPath+"users"+"/"+username+".txt"));  
                     String line = null;
                     while((line = reader.readLine()) != null){
                     if(!line.trim().isEmpty()){
-                        System.out.println(line);
+                        
                         String[] POIComp = line.split(",");
                         POI newPOI = new POI(Integer.parseInt(POIComp[0]),Integer.parseInt(POIComp[1]),POIComp[2],POIComp[3],Integer.parseInt(POIComp[4]),Boolean.valueOf(POIComp[5]),Integer.parseInt(POIComp[6]),POIComp[7]);
                         if(POIComp[7].equals(buildingName)){
@@ -201,6 +221,11 @@ public class AppWindow extends javax.swing.JFrame {
         
         
     }
+    /**
+     * gets items line by line from file
+     * @param filePath - path for file
+     * @return - ArrayList of data from file lines
+     */
     private ArrayList<String> getItemsFromFile(String filePath){
         ArrayList<String> temp = new ArrayList<String>();
         try{
@@ -1238,7 +1263,12 @@ public class AppWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-        private void savePOIs(POI poiSave,String filePath){
+    /**
+     * saves POI to meta data
+     * @param poiSave - poi to save
+     * @param filePath - filepath for metadata
+     */    
+    private void savePOIs(POI poiSave,String filePath){
         
         try{
             Files.createDirectories(Paths.get(filePath).getParent());
@@ -1256,6 +1286,11 @@ public class AppWindow extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    /**
+     * saves building data to meta data
+     * @param Build
+     * @param filePath 
+     */
         private void saveBuilding(String Build,String filePath){
             try{
             
@@ -1273,6 +1308,10 @@ public class AppWindow extends javax.swing.JFrame {
             e.printStackTrace();
         }
         }
+        /**
+         * removes meta data for building from file
+         * @param nameB - name of building to remove
+         */
         private void deleteBuilding(String nameB){
             Path path = Paths.get("src/main/resources/Building info/buildings.txt");
             Charset charset = StandardCharsets.UTF_8;
@@ -1297,7 +1336,12 @@ public class AppWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_mapImageMouseClicked
-
+    /**
+     * handles clicking on the POI layer, allows you to add POI if clicked empty
+     * area or selects POI if clicked on a POI
+     * 
+     * @param evt - mouse click event
+     */
     private void pOILayer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pOILayer1MouseClicked
         // TODO add your handling code here:
         POI clickedPOI = pOILayer1.clickContain(evt.getX(), evt.getY());
@@ -1305,6 +1349,7 @@ public class AppWindow extends javax.swing.JFrame {
         if(clickedPOI==null&&evt.getX()<mapImage.getIcon().getIconWidth()-16&&evt.getY()<mapImage.getIcon().getIconHeight()){
             resetSelect();
             
+            //open POI creation
             int result = jOptionPanePOIOption.showConfirmDialog(null, jPanelAddPOI, 
                "POI Info", jOptionPanePOIOption.OK_CANCEL_OPTION);
 
@@ -1312,6 +1357,7 @@ public class AppWindow extends javax.swing.JFrame {
             //jOptionPanePOIOption.setVisible(true);
             
             if(result==JOptionPane.OK_OPTION){
+                //creates POI and saves
                 
                 POI newPOI = new POI((int)(evt.getX()/zoomMul),(int)(evt.getY()/zoomMul),jTextFieldPOIAddName.getText(),jTextFieldPOIAddDesc.getText(),BoxPOIAdd.getSelectedIndex(),!admin,floorIndex,buildingName);
                 
@@ -1321,7 +1367,7 @@ public class AppWindow extends javax.swing.JFrame {
                 else{
                     savePOIs(newPOI,POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt");
                 }
-                
+                //relaod data and repaint
                 changeBuildPOIs();
                 editing = true;
                 searchBox.setModel(new DefaultComboBoxModel(buildAllPOIs.toArray()));
@@ -1336,6 +1382,7 @@ public class AppWindow extends javax.swing.JFrame {
             
             
         }
+        //selects POI
         else if(clickedPOI!=null){
             System.out.println("mmmHigh");
             pOILayer1.setHigh(clickedPOI);
@@ -1348,6 +1395,9 @@ public class AppWindow extends javax.swing.JFrame {
         System.out.println(clickedPOI);
         
     }//GEN-LAST:event_pOILayer1MouseClicked
+    /**
+     * updates POI info label with selected POI
+     */
     private void upDatePOIInfoLabel(){
         jPanelPOIInfo.setVisible(true);
         jLabelPOIName.setText(selectedPOI.name);
@@ -1385,32 +1435,27 @@ public class AppWindow extends javax.swing.JFrame {
         resetSelect();
     }//GEN-LAST:event_jButtonLayersActionPerformed
 
+    /**
+     * zoom out function for map
+     * @param evt - mouse click
+     */
     private void minusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minusZoomButtonActionPerformed
         // TODO add your handling code here:
-        //resetSelect();
+        
         File im = new File(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
-        //File imAC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
-        //File imWC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png");
+        
+        //rescalses file and reloads
         try{
             System.out.println(im.getPath());
             zoomMul*=0.5;
             Image image = ImageIO.read(im); // transform it
             Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
             mapImage.setIcon(new ImageIcon(newimg));
-            /*try{
-                image = ImageIO.read(imAC); // transform it
-                newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-                jLabelAC.setIcon(new ImageIcon(newimg));
-                image = ImageIO.read(imWC); // transform it
-                newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-                jLabelWC.setIcon(new ImageIcon(newimg));
-            }
-            catch(Exception e){
-                
-            }*/
+            
             
             
             Point old = mapImageScrollPane.getViewport().getViewPosition();
+            //recenters viewPort
             mapImageScrollPane.getViewport().setViewPosition(new Point(old.x/4,old.y/4));
             pOILayer1.sizeMul=zoomMul;
         }
@@ -1421,54 +1466,31 @@ public class AppWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_minusZoomButtonActionPerformed
 
-    /*private ArrayList<POI> getPOIsFromFile(String filePath){
-        ArrayList<POI> POIRead = new ArrayList<POI>();
-        try{
-          BufferedReader reader = new BufferedReader(new FileReader(filePath));  
-          String line = null;
-          while((line = reader.readLine()) != null){
-              String[] POIComp = line.split(",");
-              POI newPOI = new POI(Integer.parseInt(POIComp[1]),Integer.parseInt(POIComp[2]),POIComp[0]);
-              POIRead.add(newPOI);
-          }
-        }
-        catch(IOException e){
-            
-        }
-        return POIRead;
-    }*/
+    /**
+     * zoom in function for map
+     * @param evt - mouse click
+     */
     private void plusZoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusZoomButtonActionPerformed
         // TODO add your handling code here:
         // load the image to a imageIcon
-        //resetSelect();
+        
         File im = new File(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
-        //File imAC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png");
-        //File imWC = new File(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png");
-
+        
+        //reload and scale image of map
         try{
             System.out.println(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
             zoomMul*=2;
             Image image = ImageIO.read(im); // transform it
             Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
             mapImage.setIcon(new ImageIcon(newimg));
-            /*try{
-                image = ImageIO.read(imAC); // transform it
-                newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-                jLabelAC.setIcon(new ImageIcon(newimg));
-                image = ImageIO.read(imWC); // transform it
-                newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-                jLabelWC.setIcon(new ImageIcon(newimg));
-            }
-            catch(Exception e){
-                
-            }*/
+            
             
             
             Rectangle view = mapImageScrollPane.getViewport().getViewRect();
             Dimension size = mapImageScrollPane.getViewport().getExtentSize();
 
             view.setBounds(view.x*2+size.width/2,view.y+size.height/2,view.width,view.height);
-
+            //recenter viewPort
             mapImage.scrollRectToVisible(view);
 
             pOILayer1.sizeMul=zoomMul;
@@ -1479,17 +1501,26 @@ public class AppWindow extends javax.swing.JFrame {
 
         }
 
-        // transform it back
+        
     }//GEN-LAST:event_plusZoomButtonActionPerformed
 
     private void searchBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBoxPopupMenuWillBecomeVisible
         // TODO add your handling code here:
     }//GEN-LAST:event_searchBoxPopupMenuWillBecomeVisible
     private void reloadImages(){
-        mapImage.setIcon(new ImageIcon(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png"));
+        File im = new File(buildingPath+buildingName+"/"+buildingName+"-"+floorIndex+".png");
+        try{
+            Image image = ImageIO.read(im); // transform it
+        Image newimg = image.getScaledInstance((int)(image.getWidth(rootPane)*zoomMul), (int)(image.getHeight(rootPane)*zoomMul),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        mapImage.setIcon(new ImageIcon(newimg));
+        
         jLabelFloor.setText("Floor: "+floorIndex);
-        //jLabelAC.setIcon(new ImageIcon(buildingLayerPath+buildingName+"/"+buildingName+"-ac-"+floorIndex+".png"));
-        //jLabelWC.setIcon(new ImageIcon(buildingLayerPath+buildingName+"/"+buildingName+"-wc-"+floorIndex+".png"));
+        }
+        catch (Exception e){
+            
+        }
+        
+        
 
     }
     private void jMenuItemAddBuildingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddBuildingActionPerformed
@@ -1543,18 +1574,7 @@ public class AppWindow extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMenuItemAddBuildingActionPerformed
-    private String commaList(List<String> stuff){
-        String str = "";
-        for(int i = 0;i<stuff.size();i++){
-            if(i==0){
-                str = str+stuff.get(i);
-            }
-            else{
-                str = str+","+stuff.get(i);
-            }
-        }
-        return str;
-    }
+    
     private void jButtonAddBuildingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddBuildingMouseClicked
         // TODO add your handling code here:
         int result = jFileChooser1.showOpenDialog(jPanelAddBuilding);
@@ -1622,6 +1642,9 @@ public class AppWindow extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_jButtonUpFloorMouseClicked
+    /**
+     * on a search for POI, pulls up correct map and floor
+     */
     private void searchCenter(){
         
         if(searchBox.getSelectedIndex()==-1){
@@ -1710,15 +1733,9 @@ public class AppWindow extends javax.swing.JFrame {
                         throw new Exception("cannot delete last floor");
                     }
                     jList1.setSelectedIndex(0);
-                    /*buildingName = "MC";
-                    floorIndex = 0;
-                    zoomMul = 1;
-                    reloadImages();
-                    pOILayer1.Reset();
-                    pOILayer1.setPOIsFromFile(POIPath+buildingName+"/"+buildingName+"-"+floorIndex+".txt");
-                    pOILayer1.repaint();*/
                     
                     
+                    //delete floor items
                     File deleteFloor = new File(buildingPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"-"+jComboBoxRemoveFloorNum.getSelectedIndex()+".png");
                     System.out.println(deleteFloor.getPath());
                     File deleteFloorPOI = new File(POIPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"-"+jComboBoxRemoveFloorNum.getSelectedIndex()+".txt");
@@ -1726,6 +1743,7 @@ public class AppWindow extends javax.swing.JFrame {
                     deleteFloorPOI.delete();
                     deleteFloorBuildingPOI(jComboBoxRemoveFloorBuild.getSelectedItem().toString(),(""+jComboBoxRemoveFloorNum.getSelectedIndex()),POIPath+"favourites/favourites.txt");
                     File[] userStuff = new File(POIPath+"users").listFiles();
+                    //delete floor metadata and re factor other floors for delted floor
                     for(int i = jComboBoxRemoveFloorNum.getSelectedIndex()+1;i<jComboBoxRemoveFloorNum.getItemCount();i++){
                         
                         File newName = new File(buildingPath+jComboBoxRemoveFloorBuild.getSelectedItem().toString()+"/"+jComboBoxRemoveFloorBuild.getSelectedItem()+"-"+(i-1)+".png");
@@ -1891,6 +1909,7 @@ public class AppWindow extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_pOILayer1MouseReleased
+    
     private void resetSelect(){
         pOILayer1.setHigh(null);
         jPanelPOIInfo.setVisible(false);
@@ -1949,6 +1968,7 @@ public class AppWindow extends javax.swing.JFrame {
                     changePOIData(selectedPOI,newPOI,POIPath+newPOI.building+"/"+newPOI.building+"-"+newPOI.floor+".txt","",false);
                     
                 }
+                System.out.println(zoomMul+" OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
                 changePOIData(selectedPOI,newPOI,POIPath+"favourites"+"/favourites.txt","",false);
                 loadFavouritesData();
                 changeBuildPOIs();
@@ -1958,6 +1978,7 @@ public class AppWindow extends javax.swing.JFrame {
                 //searchBox.setSelectedIndex();
                 
                 reloadImages();
+                System.out.println(zoomMul+" POIPOIDPOSIDPOSIDPOSIDOIPD");
 
                 
             }
@@ -1969,6 +1990,7 @@ public class AppWindow extends javax.swing.JFrame {
         if(!admin){
               pOILayer1.addApplicable(POIPath+"users"+"/"+username+".txt",buildingName,floorIndex);  
             }
+        pOILayer1.sizeMul=zoomMul;
         pOILayer1.repaint();
     }//GEN-LAST:event_jButtonEditPOIMouseClicked
 
@@ -2018,6 +2040,10 @@ public class AppWindow extends javax.swing.JFrame {
         
         }
     }//GEN-LAST:event_jMenu6MouseClicked
+    /**
+     * following a search, correctly toggles POI layers so search item will show
+     * @param m - POI to search for
+     */
     private void toggleCorrect(POI m){
         if(m.POIType==POI.NAVIGATION){
             jToggleButtonNav.setSelected(true);
@@ -2226,6 +2252,10 @@ public class AppWindow extends javax.swing.JFrame {
         int result = jOptionPaneEdit.showConfirmDialog(null,jPanelHelp,"Help",JOptionPane.OK_CANCEL_OPTION);
         
     }//GEN-LAST:event_jMenuHelpMouseClicked
+    /**
+     * saves Favourite metadata
+     * @param poiSave - POI to save
+     */
     private void saveFav(POI poiSave){
         try{
             
@@ -2244,8 +2274,14 @@ public class AppWindow extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    
     /**
-     * @param args the command line arguments
+     * changes meta data from old POI to new POI
+     * @param oldPOI - Old data POI
+     * @param newPOI - new data POI
+     * @param filePath - metadata file
+     * @param mod - mods to make to end of metadata
+     * @param delete  - delete old data or replace
      */
     private void changePOIData(POI oldPOI,POI newPOI,String filePath,String mod,boolean delete){
         Path path = Paths.get(filePath);
@@ -2270,6 +2306,12 @@ public class AppWindow extends javax.swing.JFrame {
         }
         
     }
+    /**
+     * delets POI data from file with corressponding building and floor
+     * @param building - building to delete for
+     * @param floor - floor to delte for
+     * @param filePath  - metadata
+     */
     private void deleteFloorBuildingPOI(String building,String floor,String filePath){
         Path path = Paths.get(filePath);
         Charset charset = StandardCharsets.UTF_8;
@@ -2291,6 +2333,10 @@ public class AppWindow extends javax.swing.JFrame {
         
         
     }
+    /**
+     * deletes a POI from Favourites metadata
+     * @param poi - POI to delete
+     */
     private void removeFav(String poi){
         Path path = Paths.get(POIPath+"favourites/favourites.txt");
         Charset charset = StandardCharsets.UTF_8;
@@ -2312,6 +2358,11 @@ public class AppWindow extends javax.swing.JFrame {
         
         
     }
+
+    /**
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

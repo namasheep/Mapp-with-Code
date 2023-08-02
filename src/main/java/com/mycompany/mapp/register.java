@@ -5,8 +5,8 @@
 package com.mycompany.mapp;
 
 /**
- *
- * @author valeria
+ *Register for app (not operating)
+ * @author Group 7
  */
 public class register extends javax.swing.JFrame {
 

@@ -7,8 +7,8 @@ package com.mycompany.mapp;
 import com.mycompany.mapp.register;
 
 /**
- *
- * @author valeria
+ *main menu for Map App
+ * @author Group 7
  */
 public class mainMenu extends javax.swing.JFrame {
 

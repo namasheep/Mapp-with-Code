@@ -14,8 +14,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author valeria
+ *Opens login page for Map app
+ * @author Group 7
  */
 public class Mapp extends javax.swing.JFrame {
 
@@ -27,6 +27,10 @@ public class Mapp extends javax.swing.JFrame {
     List<String> adminUsernames;
     List<String> userPasswords;
     List<String> adminPasswords;
+    
+    /**
+     * 
+     */
     public Mapp() {
         initComponents();
         userUsernames = loadUserData("src/main/resources/login/user-Username.txt");
@@ -35,6 +39,11 @@ public class Mapp extends javax.swing.JFrame {
         adminPasswords = loadUserData("src/main/resources/login/admin-Password.txt");
         
     }
+    /**
+     * gets username and password files for admin and users
+     * @param filePath - data file
+     * @return - returns Lit of data
+     */
     private List<String> loadUserData(String filePath){
         List<String> data = null;
         try{

@@ -18,8 +18,8 @@ import javax.imageio.ImageIO;
 
 
 /**
- *
- * @author DELL
+ *handles POI display for map App
+ * @author Group 7
  */
 public class POILayer extends JPanel {
     
@@ -44,6 +44,10 @@ public class POILayer extends JPanel {
     POI dragPOI=null;
     int dragX = 0;
     int dragY = 0;
+
+    /**
+     *
+     */
     public POILayer(){
         super();
         try{
@@ -56,6 +60,10 @@ public class POILayer extends JPanel {
         
     }
     
+    /**
+     *overriden paint component to display POIs on top of graphics
+     * @param g - graphics
+     */
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -177,20 +185,28 @@ public class POILayer extends JPanel {
         
     
     }
+    /**
+     * if a POI is being dragged draw last and not in original location
+     * @param g 
+     */
     private void paintDrag(Graphics g){
         g.drawImage(dragPOI.imIcon,(int)(dragX-16), (int)(dragY-32), this);
     }
+
+    /**
+     *changes size multiplier for layer
+     * @param mul
+     */
     public void setSizeMul(double mul){
         sizeMul=mul;
     }
+
+    /**
+     *Compares POI to stored POIs and will mark an equivalent stored one as 
+     * highlighted
+     * @param m - POI to highlight
+     */
     public void findAndSetHigh(POI m){
-        /*
-        ArrayList<POI> navPOIs = new ArrayList<POI>();
-    ArrayList<POI> classPOIs = new ArrayList<POI>();
-    ArrayList<POI> resPOIs = new ArrayList<POI>();
-    ArrayList<POI> labsPOIs = new ArrayList<POI>();
-    ArrayList<POI> csPOIs
-        */
         for(POI i:navPOIs){
             if(i.equals(m)){
                 setHigh(i);
@@ -229,6 +245,10 @@ public class POILayer extends JPanel {
         
     }
     
+    /**
+     *sets the highlighted POI
+     * @param newHigh - highlight POI
+     */
     public void setHigh(POI newHigh){
         if(highPOI!=null){
             highPOI.highlighted=false;
@@ -239,6 +259,14 @@ public class POILayer extends JPanel {
         
         highPOI = newHigh;
     }
+
+    /**
+     *returns if an X Y is contained in any stored POI, takes into account
+     * size multiplier for zoom
+     * @param x - x to check
+     * @param y - y to check
+     * @return - POI containing x y closest or null if none
+     */
     public POI clickContain(int x,int y){
         POI ret=null;
         double dist=-1;
@@ -357,9 +385,22 @@ public class POILayer extends JPanel {
         
         return ret;
     }
+    /**
+     * distance between 2 points
+     * @param x1 
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return distance between points
+     */
     private double calcDist(double x1,double y1,int x2, int y2){
         return Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
     }
+
+    /**
+     *adds a POI to correct List category
+     * @param newPOI - POI to add
+     */
     public void addPOI(POI newPOI){
         if(newPOI.POIType==POI.CLASSROOMS){
             classPOIs.add(newPOI);
@@ -385,6 +426,10 @@ public class POILayer extends JPanel {
         }
         
     }
+
+    /**
+     *resets all changing variables
+     */
     public void Reset(){
         /*
         save code
@@ -401,6 +446,10 @@ public class POILayer extends JPanel {
         dragPOI=null;
         sizeMul = 1;
     }
+
+    /**
+     *resets all changing variables except size
+     */
     public void smallReset(){
         classPOIs.clear();
         navPOIs.clear();
@@ -416,6 +465,14 @@ public class POILayer extends JPanel {
     /*public void setPOIs(ArrayList<POI> newList){
         myPOIs = newList;
     }*/
+
+    /**
+     *adds any applicable POIs with correct floor and building to the layer
+     * @param filePath - data
+     * @param building - building to add POIs from
+     * @param floor - floor to check
+     */
+
     public void addApplicable(String filePath,String building,int floor){
         try{
           BufferedReader reader = new BufferedReader(new FileReader(filePath));  
@@ -441,6 +498,11 @@ public class POILayer extends JPanel {
         }
         
     }
+
+    /**
+     *sets the moving POI during a drag
+     * @param m - the moving POI
+     */
     public void moveingPOI(POI m){
         if(dragPOI!=null){
             dragPOI.dragging=false;
@@ -452,6 +514,11 @@ public class POILayer extends JPanel {
         dragPOI = m;
     }
     
+    /**
+     *sets all POI lists from given POI meta data
+     * @param filePath - data
+     * @param Floor - floor to add from
+     */
     public void setPOIsFromFile(String filePath,int Floor){
         try{
           BufferedReader reader = new BufferedReader(new FileReader(filePath));  
